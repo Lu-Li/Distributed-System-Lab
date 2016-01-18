@@ -1,9 +1,0 @@
-package lab0;
-import org.yaml.snakeyaml.Yaml;
-
-public class Driver {
-	public static void main(String[] args) {
-		Yaml yaml = new Yaml();
-		System.out.println("test");
-	}
-}
