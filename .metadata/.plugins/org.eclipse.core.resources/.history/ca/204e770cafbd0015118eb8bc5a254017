@@ -1,0 +1,16 @@
+package lab0;
+
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
+import java.util.*;
+
+public class Driver {
+	public static void main(String[] args) {
+		InputStream input = new FileInputStream(new File(
+	            "src/main/resources/specification/example2_28.yaml"));
+		Yaml yaml = new Yaml();
+		List<String> list = (List<String>) yaml.loadAll(input);
+		System.out.println(list);
+	}
+}
