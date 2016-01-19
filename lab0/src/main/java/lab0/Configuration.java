@@ -78,13 +78,4 @@ public class Configuration {
 
 		return Action.NoAction;
 	}
-
-	public static void main(String[] args) {
-		Configuration config = new Configuration();
-		Message message = new Message("bob", "ACK", null);
-		message.set_seqNum(0);
-		message.set_source("charlie");
-		Action action = config.getAction(message, Direction.Receive);
-		System.out.println(action);
-	}
 }
