@@ -8,18 +8,25 @@ import java.util.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 
 public class Configuration {
+	// Network configuration
 	private List<Map> network;
+	
+	// Action Rules
 	private List<Map> sendRules;
 	private List<Map> receiveRules;
-
+	
 	public enum Action {
 		Drop, DropAfter, Delay, NoAction
 	}
 
+	// Message directions
 	public enum Direction {
 		Send, Receive
 	}
 
+	// MARK: Constructors
+	// ==============================================================
+	
 	public Configuration() {
 		this("src/main/resources/config.yaml");
 	}
@@ -46,6 +53,37 @@ public class Configuration {
 		}
 	}
 
+	// MARK: Getters
+	// ==============================================================	
+
+	/**
+	 * @return a list of names defined in the network configuration file
+	 */
+	public List<String> getAllNames(){
+		List<String> result = new LinkedList<String>();
+		for (Map map : network){
+			String name = (String) map.get("name");
+			result.add(name);
+		}
+		return result;
+	}
+	
+	/**
+	 * @param name of the process
+	 * @return String representation of the process's ip, null if not found
+	 */
+	public String getIpStringForName(String name){
+		for (Map map : network){
+			String dest = (String) map.get("name");
+			if (name.equals(dest)){
+				return (String) map.get("ip");
+			}
+		}
+		return null;
+	}
+	
+	
+	// Used by MessagePasser
 	public Action getAction(Message message, Direction direction) {
 		if (!message.isValid()) {
 			System.err.println("message is not valid:" + message);
