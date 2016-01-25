@@ -12,17 +12,23 @@ public class Driver {
 		System.out.println(action);
 		*/
 		
+		// Read arguments
 		int argn = args.length;
 		if (argn > 3 || argn == 0){
 			System.out.println("Usage: Driver [config file path] name");
 			return;
 		}
 		
+		// init MessagePasser and read configuration file 
 		MessagePasser messagePasser;
 		if (argn == 2)
 			messagePasser = new MessagePasser(null, args[1]);
 		else 
 			messagePasser = new MessagePasser(args[1], args[2]);
+		
+		//TODO(Baiqi): init socket
+		
+		//TODO(Baiqi): read stdin and run command
 	}
 
 }

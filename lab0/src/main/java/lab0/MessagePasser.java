@@ -8,12 +8,21 @@ import lab0.Configuration.Action;
 import lab0.Configuration.Direction;
 
 public class MessagePasser {
+	// Local name
 	private String src = null;
+	// Configuration Object. 
 	private Configuration config = null;
+	
+	// Destination -> SequenceID
 	private Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
-	private Queue<Message> messageQueue = null;
+	// Queue for receiving
+	private Queue<Message> messageQueue = new LinkedList<Message>();
+	// Queue for sending
+	private Queue<Message> delayQueue = new LinkedList<Message>();
 
-	// MARK: Application level API
+
+	// MARK: Application level API	
+	// ==============================================================
 	
 	public MessagePasser(String configuration_filename, String local_name) {
 		if (configuration_filename != null)
@@ -62,7 +71,8 @@ public class MessagePasser {
 	}
 
 	// MARK: Communication level API
-	
+	// ==============================================================
+
 	public Message getMessageFromSocketCallback(){
 		// TODO(Lu): Call this when socket received a message
 		return null;

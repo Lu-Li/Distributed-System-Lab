@@ -3,6 +3,9 @@ package lab0;
 import java.io.Serializable;
 
 public class Message implements Serializable {
+	// serialization version 1. 
+	private static final long serialVersionUID = 1L;
+	
 	private String src;
 	private String dest;
 	private String kind;
