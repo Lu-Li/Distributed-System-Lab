@@ -13,6 +13,8 @@ public class MessagePasser {
 	// Configuration Object. 
 	private Configuration config = null;
 	
+	private int establishedConnections = 0;
+	
 	// Destination -> SequenceID
 	private Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
 	// Queue for receiving
@@ -20,7 +22,24 @@ public class MessagePasser {
 	// Queue for sending
 	private Queue<Message> delayQueue = new LinkedList<Message>();
 
-
+	// MARK: Configuration API
+	// ==============================================================
+	
+	/**
+	 * @return a list of names defined in the network configuration file
+	 */
+	public List<String> getAllNames(){
+		return config.getAllNames();
+	}
+	
+	/**
+	 * @param name of the process
+	 * @return String representation of the process's ip, null if not found
+	 */
+	public String getIpStringForName(String name){
+		return config.getIpStringForName(name);
+	}
+	
 	// MARK: Application level API	
 	// ==============================================================
 	
