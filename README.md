@@ -1,4 +1,6 @@
 # DSTeam10
+
 usage:
-1. maven - build :  clean install
-2. run
+    $ cd lab0
+    $ mvn clean dependency:copy-dependencies package
+    $ java -cp target/dependency/*:target/* lab0.Driver src/main/resources/config.yaml Alice

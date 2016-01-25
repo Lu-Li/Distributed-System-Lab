@@ -1,33 +1,74 @@
 package lab0;
 
+import java.io.Serializable;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import lab0.Configuration.Action;
 import lab0.Configuration.Direction;
 
 public class MessagePasser {
-	String src = null;
-	Configuration config = null;
-	AtomicInteger seqNumber = new AtomicInteger(0);
+	private String src = null;
+	private Configuration config = null;
+	private Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
+	private Queue<Message> messageQueue = null;
+
+	// MARK: Application level API
 	
-	public MessagePasser(String configuration_filename, String local_name){
-		if (configuration_filename!=null)
+	public MessagePasser(String configuration_filename, String local_name) {
+		if (configuration_filename != null)
 			config = new Configuration(configuration_filename);
-		else 
+		else
 			config = new Configuration();
 		src = local_name;
 	}
-	
-	void send(Message message){
-		int seq = seqNumber.incrementAndGet();
+
+	public void send(Message message) {
+		// get sequence number from hashmap
+		Integer seqNumber = seqNumberMap.get(src);
+		int seq = 0;
+		if (seqNumber == null)
+			seqNumber = new Integer(0);
+		else 
+			seq = seqNumber++;
+		seqNumberMap.put(src, seqNumber);
+		
+		// set message parameters
 		message.set_seqNum(seq);
 		message.set_source(src);
+		
+		// find corresponding action
 		Action action = config.getAction(message, Direction.Send);
-		// TODO: Send/Drop/Delay the message
+		switch (action) {
+		case NoAction:
+			sendMessageBySocket(message);
+			break;
+		case Drop:
+		case DropAfter:
+			break;
+		case Delay:
+			// TODO(Baiqi): Delay sending the message
+			break;
+		}
+	}
+
+	public Message receive() {	
+		// get a message from the messageQueue
+		if (messageQueue.isEmpty()) {
+			return null;
+		} else {
+			return messageQueue.poll();
+		}
+	}
+
+	// MARK: Communication level API
+	
+	public Message getMessageFromSocketCallback(){
+		// TODO(Lu): Call this when socket received a message
+		return null;
 	}
 	
-	Message receive(){
-		// TODO: Receive the message
-		return null;
+	public void sendMessageBySocket(Message message){		
+		// TODO(Lu): Send the message via socket
 	}
 }
