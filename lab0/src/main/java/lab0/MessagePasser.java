@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import edu.cmu.ds.lab0.Sender;
 import lab0.Configuration.Action;
 import lab0.Configuration.Direction;
 
@@ -83,5 +84,6 @@ public class MessagePasser {
 	
 	public void sendMessageBySocket(Message message){		
 		// TODO(Lu): Send the message via socket (This should be put in another class)
+		Sender.addMsg(msg);
 	}
 }
