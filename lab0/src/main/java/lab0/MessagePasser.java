@@ -16,7 +16,7 @@ public class MessagePasser {
 	// Destination -> SequenceID
 	private Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
 	// Queue for receiving
-	private Queue<Message> messageQueue = new LinkedList<Message>();
+	private Queue<Message> receiveQueue = new LinkedList<Message>();
 	// Queue for sending
 	private Queue<Message> delayQueue = new LinkedList<Message>();
 
@@ -50,35 +50,38 @@ public class MessagePasser {
 		Action action = config.getAction(message, Direction.Send);
 		switch (action) {
 		case NoAction:
+			while (!delayQueue.isEmpty()){
+				Message delayedMessage = delayQueue.poll();
+				sendMessageBySocket(delayedMessage);
+			}
 			sendMessageBySocket(message);
 			break;
+		case Delay:
+			delayQueue.add(message);
 		case Drop:
 		case DropAfter:
-			break;
-		case Delay:
-			// TODO(Baiqi): Delay sending the message
 			break;
 		}
 	}
 
 	public Message receive() {	
 		// get a message from the messageQueue
-		if (messageQueue.isEmpty()) {
+		if (receiveQueue.isEmpty()) {
 			return null;
 		} else {
-			return messageQueue.poll();
+			return receiveQueue.poll();
 		}
 	}
 
 	// MARK: Communication level API
 	// ==============================================================
 
-	public Message getMessageFromSocketCallback(){
+	public void getMessageFromSocketCallback(Message message){
 		// TODO(Lu): Call this when socket received a message
-		return null;
+		receiveQueue.add(message);		
 	}
 	
 	public void sendMessageBySocket(Message message){		
-		// TODO(Lu): Send the message via socket
+		// TODO(Lu): Send the message via socket (This should be put in another class)
 	}
 }
