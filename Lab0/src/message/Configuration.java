@@ -1,4 +1,4 @@
-package lab0;
+package message;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -77,6 +77,20 @@ public class Configuration {
 			String dest = (String) map.get("name");
 			if (name.equals(dest)){
 				return (String) map.get("ip");
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param name of the process
+	 * @return String representation of the process's port, null if not found
+	 */
+	public String getPortStringForName(String name){
+		for (Map map : network){
+			String dest = (String) map.get("name");
+			if (name.equals(dest)){
+				return (String) map.get("port");
 			}
 		}
 		return null;

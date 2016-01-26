@@ -1,10 +1,13 @@
-package lab0;
+package socket;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import message.Message;
+import message.MessagePasser;
 
 public class Sender implements Runnable {
 	
@@ -26,23 +29,27 @@ public class Sender implements Runnable {
 				Message message = queue.take();
                 String serverName = message.getDest();
                 HashMap<String, StreamPair> stream = SessionMap.getSessionMap();
+                
                 // first get outputstream from server name
                 StreamPair sp = stream.get(serverName);
                 ObjectOutputStream oos = sp.getOos();
                 ObjectInputStream ois = sp.getOis();
+
                 // if outputStream not exist, new one socket
                 if (oos == null) {
-                	HashMap<String, ServerInfo> info = SessionMap.getInfoMap();
-                	String serverIp = info.get(serverName).getIp();
-                    int serverPort = info.get(serverName).getPort();
+                	String serverIp = MessagePasser.getIpStringForName(serverName);
+                	String portString = MessagePasser.getIpStringForName(serverName);
+                    int serverPort = Integer.parseInt(portString);
+                    
     				Socket socket = new Socket(serverIp, serverPort);
     				oos = new ObjectOutputStream(socket.getOutputStream());
     				ois = new ObjectInputStream(socket.getInputStream());
+    				
     				// no need to store to receive queue since this first response is only to set up connection
     				Message firstRep = (Message)ois.readObject();
-    				System.out.println("first response from new connection : " + firstRep.getData());
-    				StreamPair newpair = new StreamPair(ois, oos);
-    				stream.put(serverName, newpair);
+    				
+    				System.err.println("[INFO] first response from new connection : " + firstRep.getData());
+    				stream.put(serverName, new StreamPair(ois, oos));
     				
     				// Create a new thread to receive message from this new connection.
     				Thread thread = new Thread(new Receiver(ois));

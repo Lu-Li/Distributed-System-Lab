@@ -1,4 +1,4 @@
-package lab0;
+package socket;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
