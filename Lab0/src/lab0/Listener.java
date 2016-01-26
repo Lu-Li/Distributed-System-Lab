@@ -28,8 +28,9 @@ public class Listener implements Runnable {
 				String name = firIn.getSrc();
 				StreamPair pair = new StreamPair(ois, oos);
 				SessionMap.addStreamPair(name, pair);
+				
 				// TODO: change here,call receive msg function and add this first useful msg to read queue
-				new MessagePasser().getMessageFromSocketCallback(firIn);
+				Driver.messagePasser.getMessageFromSocketCallback(firIn);
 				
 				// Create a new thread to receive message from this new connection.
 				Thread thread = new Thread(new Receiver(ois));

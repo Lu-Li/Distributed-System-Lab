@@ -20,8 +20,7 @@ public class Receiver implements Runnable {
 			while (true) {
 				if ((message = (Message) (ois.readObject())) != null) {
 					System.out.println("message: " + message.getData() + " from " + message.getSrc());
-					// TODO: change here
-					new MessagePasser().getMessageFromSocketCallback(message);
+					Driver.messagePasser.getMessageFromSocketCallback(message);
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {

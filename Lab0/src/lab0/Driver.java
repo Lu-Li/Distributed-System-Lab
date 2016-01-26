@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Driver {
+	public static MessagePasser messagePasser;
+	
 	public static void main(String[] args) throws InterruptedException {
 		/*
 		// Test
@@ -23,17 +25,16 @@ public class Driver {
 		
 		// Read arguments
 		int argn = args.length;
-		if (argn > 3 || argn == 0){
+		if (argn > 2 || argn == 0){
 			System.out.println("Usage: Driver [config file path] name");
 			return;
 		}
 		
 		// init MessagePasser and read configuration file 
-		MessagePasser messagePasser;
-		if (argn == 2)
-			messagePasser = new MessagePasser(null, args[1]);
+		if (argn == 1)
+			messagePasser = new MessagePasser(null, args[0]);
 		else 
-			messagePasser = new MessagePasser(args[1], args[2]);
+			messagePasser = new MessagePasser(args[0], args[1]);
 		
 		// TODO(Lu): init socket	
 		System.out.println("Welcome to team10-lab0!");
