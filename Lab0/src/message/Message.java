@@ -13,7 +13,7 @@ public class Message implements Serializable {
 	private Object data;
 	
 	public Message(String dest, String kind, Object data){
-		this.data = data;
+		this.dest = dest;
 		this.kind = kind;
 		this.data = data;
 	}

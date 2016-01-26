@@ -19,10 +19,10 @@ public class Listener extends Thread{
 			sersoc = new ServerSocket(this.port);
 			int count = 0;
 			while (count < 3) {
-				System.err.println("[INFO] listener starts");
+				System.err.println("[Listener] starts");
 				Socket socket = sersoc.accept();
 								
-				System.err.println("[INFO] socket connected");
+				System.err.println("[Listener] socket connection accepted");
 				ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 				Message firIn = (Message) ois.readObject(); 
@@ -37,8 +37,7 @@ public class Listener extends Thread{
 				MessagePasser.getMessageFromSocketCallback(firIn);
 				
 				// Create a new thread to receive message from this new connection.
-				Thread thread = new Thread(new Receiver(ois));
-                thread.start();
+				new Receiver(ois).start();
                 
                 // listen again until connected to all processes
                 count++;

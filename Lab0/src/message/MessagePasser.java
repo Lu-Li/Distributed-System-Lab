@@ -43,7 +43,7 @@ public class MessagePasser {
 	 * @param name of the process
 	 * @return String representation of the process's ip, null if not found
 	 */
-	public static  String getIpStringForName(String name){
+	public static String getIpStringForName(String name){
 		return config.getIpStringForName(name);
 	}
 		
@@ -51,7 +51,7 @@ public class MessagePasser {
 	 * @param name of the process
 	 * @return Integer representation of the process's port, null if not found
 	 */
-	public Integer getPortNumberForName(String name){
+	public static Integer getPortNumberForName(String name){
 		return config.getPortNumberForName(name);
 	}
 	

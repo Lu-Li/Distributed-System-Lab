@@ -16,10 +16,11 @@ public class Receiver extends Thread{
 
 	public void run() {
 		Message message = null;
+		System.err.println("[Receiver] started");
 		try {
 			while (true) {
 				if ((message = (Message) (ois.readObject())) != null) {
-					System.err.println("[INFO] message: " + message.getData() + " from " + message.getSrc());
+					System.err.println("[Receiver] message: " + message.getData() + " from " + message.getSrc());
 					MessagePasser.getMessageFromSocketCallback(message);
 				}
 				Thread.sleep(1);

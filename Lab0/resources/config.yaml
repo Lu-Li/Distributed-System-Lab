@@ -8,17 +8,17 @@
 configuration :
   - name : alice
     ip : 192.168.1.52
-    port : 12344    # This is the incoming port on which MP will listen
+    port : 10010    # This is the incoming port on which MP will listen
                     # May be changed for further communication as usual
   - name : bob
     ip : 192.168.1.112
-    port : 14255
-  - name : charlie
-    ip : 128.2.130.19
-    port : 12998
-  - name : daphnie
-    ip : 192.168.1.87
-    port : 1987
+    port : 10020
+  - name : c
+    ip : 172.29.92.200
+    port : 10030
+  - name : d
+    ip : 172.29.92.200
+    port : 10040
 
 sendRules :
   - action : drop # Ack message number 4 from bob to alice will not be sent
@@ -28,9 +28,9 @@ sendRules :
     seqNum : 4
   - action : dropAfter # Daphnie will stop sending Reply messages after seq#6
     kind : Reply
-    src : daphnie
+    src : d
     seqNum : 6
 
 receiveRules :
   - action : delay # Everyone sees two copies of charlie's messages
-    src : charlie # even though he only sends one
+    src : c # even though he only sends one
