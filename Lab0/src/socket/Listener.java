@@ -27,7 +27,7 @@ public class Listener extends Thread{
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 				Message firIn = (Message) ois.readObject(); 
 				
-				//TODO: change des from message passer
+				System.err.println("[Listener] first message: kind = "+firIn.getKind());
 				Message firOut = new Message(firIn.getSrc(), "confirm", "first message");
 				oos.writeObject(firOut);
 				String name = firIn.getSrc();

@@ -23,9 +23,14 @@ public class Sender extends Thread {
 	}
 
 	public void run() {
+		System.err.println("[Sender] started");
 		while (true) {
 			try {
+				// block while queue is empty
 				Message message = queue.take();
+				
+				System.err.println("[Sender] about to send message: kind = "+ message.getKind());
+				
 				String serverName = message.getDest();
 				HashMap<String, StreamPair> stream = SessionMap.getSessionMap();
 
@@ -43,20 +48,24 @@ public class Sender extends Thread {
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					ois = new ObjectInputStream(socket.getInputStream());
 
+					System.err.println("[Sender] send message using new socket");
+					oos.writeObject(message);
+					
 					// no need to store to receive queue since this first
 					// response is only to set up connection
 					Message firstRep = (Message) ois.readObject();
 
-					System.err.println("[INFO] first response from new connection : " + firstRep.getData());
+					System.err.println("[Sender] first response from new connection : " + firstRep.getData());
 					stream.put(serverName, new StreamPair(ois, oos));
 
 					// Create a new thread to receive message from this new
 					// connection.
 					Thread thread = new Thread(new Receiver(ois));
 					thread.start();
+				} else {
+					System.err.println("[Sender] send message using reused socket");
+					oos.writeObject(message);
 				}
-				System.out.println("sender starts");
-				oos.writeObject(message);
 
 			} catch (IOException e) {
 				e.printStackTrace();

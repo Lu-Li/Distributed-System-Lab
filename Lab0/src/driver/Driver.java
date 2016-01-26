@@ -36,38 +36,45 @@ public class Driver {
 		// simple UI
 		boolean done = false;
 		while (!done) {
+			Thread.sleep(300);
+			System.out.println("=======================");
 			System.out.println("1. Send a Message");
 			System.out.println("2. Receive a Message");
 			System.out.println("other: exit");
+			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
 
-			int selection = scanner.nextInt();
-			Message message;
-			switch (selection) {
-			case 1:
-				System.out.print("destination(name):");
-				String dest = scanner.next();
-				System.out.print("kind:");
-				String kind = scanner.next();
-				System.out.print("content:");
-				String payload = scanner.next();
-				message = new Message(dest, kind, payload);
-				MessagePasser.send(message);				
-				break;
-			case 2:
-				message = MessagePasser.receive();
-				if (message == null){
-					System.out.print("Empty buffer.");
+			try {
+				int selection = scanner.nextInt();
+				Message message;
+				switch (selection) {
+				case 1:
+					System.out.print("destination(name):");
+					String dest = scanner.next();
+					System.out.print("kind:");
+					String kind = scanner.next();
+					System.out.print("content:");
+					String payload = scanner.next();
+					message = new Message(dest, kind, payload);
+					MessagePasser.send(message);				
 					break;
-				}
-				System.out.print("src:" + message.getSrc());
-				System.out.print("kind:" + message.getKind());
-				System.out.print("content:" + message.getData().toString());
-				break;
+				case 2:
+					message = MessagePasser.receive();
+					if (message == null){
+						System.out.print("Empty buffer.");
+						break;
+					}
+					System.out.println("src:" + message.getSrc());
+					System.out.println("kind:" + message.getKind());
+					System.out.println("content:" + message.getData().toString());
+					break;
 
-			default:
-				done = true;
-				break;
+				default:
+					done = true;
+					break;
+				}				
+			} catch (InputMismatchException e) {
+				System.out.println("INPUT MISMATCH!");
 			}
 		}
 	}
