@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import message.Message;
 import message.MessagePasser;
 
-public class Sender implements Runnable {
+public class Sender extends Thread{
 	
 	private static final BlockingQueue<Message> queue =
             new LinkedBlockingQueue<> ();

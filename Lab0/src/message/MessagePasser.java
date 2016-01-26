@@ -27,9 +27,11 @@ public class MessagePasser {
 	public static String getLocalName(){
 		return src;
 	}
+	
 	public static String getLocalPort(){
 		return src;
 	}
+	
 	/**
 	 * @return a list of names defined in the network configuration file
 	 */
@@ -44,14 +46,13 @@ public class MessagePasser {
 	public static  String getIpStringForName(String name){
 		return config.getIpStringForName(name);
 	}
-	
-	
+		
 	/**
 	 * @param name of the process
-	 * @return String representation of the process's port, null if not found
+	 * @return Integer representation of the process's port, null if not found
 	 */
-	public static String getPortStringForName(String name){
-		return config.getPortStringForName(name);
+	public Integer getPortNumberForName(String name){
+		return config.getPortNumberForName(name);
 	}
 	
 	// MARK: Application level API	
@@ -64,9 +65,9 @@ public class MessagePasser {
 			config = new Configuration();
 		src = local_name;
 		
-		String port = config.getPortStringForName(local_name);
-		new Listener(Integer.parseInt(port)).run();
-		new Sender().run();
+		Integer port = config.getPortNumberForName(local_name);
+		new Listener(port).start();
+		new Sender().start();
 	}
 
 	public static void send(Message message) {

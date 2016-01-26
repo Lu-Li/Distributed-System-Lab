@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import message.Message;
 import message.MessagePasser;
 
-public class Receiver implements Runnable {
+public class Receiver extends Thread{
 
 	private ObjectInputStream ois;
 	

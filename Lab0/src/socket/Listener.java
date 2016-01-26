@@ -6,7 +6,7 @@ import java.net.*;
 import message.Message;
 import message.MessagePasser;
 
-public class Listener implements Runnable {
+public class Listener extends Thread{
 	private int port;
 
 	public Listener(int port) {
