@@ -19,4 +19,7 @@ public class SessionMap {
 		sessionMap.put(serverName, pair);
 	}
 	
+	public static void removeStreamPair(String serverName) {
+		sessionMap.remove(serverName);
+	}
 }
