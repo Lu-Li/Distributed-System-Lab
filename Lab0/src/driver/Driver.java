@@ -61,7 +61,7 @@ public class Driver {
 				case 2:
 					message = MessagePasser.receive();
 					if (message == null){
-						System.out.print("Empty buffer.");
+						System.out.println("No message!");
 						break;
 					}
 					System.out.println("src:" + message.getSrc());

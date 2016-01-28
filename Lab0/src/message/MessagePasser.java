@@ -15,11 +15,13 @@ public class MessagePasser {
 	private static Configuration config = null;
 	
 	// Destination -> SequenceID
-	private static  Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
+	private static Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
+	// Received non-delay messages
+	private static int countNonDelay = 0;
 	// Queue for receiving
-	private static  Queue<Message> receiveQueue = new LinkedList<Message>();
+	private static Queue<Message> receiveQueue = new LinkedList<Message>();
 	// Queue for sending
-	private static  Queue<Message> delayQueue = new LinkedList<Message>();
+	private static Queue<Message> delayQueue = new LinkedList<Message>();
 
 	// MARK: Configuration API
 	// ==============================================================
@@ -102,12 +104,18 @@ public class MessagePasser {
 		}
 	}
 
-	public static Message receive() {	
-		// get a message from the messageQueue
-		if (receiveQueue.isEmpty()) {
+	public static Message receive() {
+		System.err.println("[MsgPasser] receive: "+countNonDelay+"/"+receiveQueue.size());
+		// if no message or  all are delayed message, return null
+		if (countNonDelay == 0){
 			return null;
 		} else {
-			return receiveQueue.poll();
+			// get a message from the messageQueue
+			Message message = receiveQueue.poll();
+			Action action = config.getAction(message, Direction.Receive);
+			if (action == Action.NoAction)
+				countNonDelay--;
+			return message;
 		}
 	}
 
@@ -115,7 +123,22 @@ public class MessagePasser {
 	// ==============================================================
 
 	public static void getMessageFromSocketCallback(Message message){
-		receiveQueue.add(message);		
+		Action action = config.getAction(message, Direction.Receive);
+		switch (action) {
+		case NoAction:
+			countNonDelay ++ ;
+			System.err.println("[MsgPasser] Callback - NoAction "+countNonDelay+"/"+receiveQueue.size()+1);
+		case Delay:
+			receiveQueue.add(message);
+			System.err.println("[MsgPasser] Callback - Delay "+countNonDelay+"/"+receiveQueue.size());
+			break;
+		case Drop:
+			System.err.println("[MsgPasser] Callback - Drop");
+			break;
+		case DropAfter:
+			System.err.println("[MsgPasser] Callback - DropAfter");
+			break;
+		}		
 	}
 	
 	public static void sendMessageBySocket(Message message){		

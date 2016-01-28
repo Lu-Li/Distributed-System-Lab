@@ -1,4 +1,4 @@
 # DSTeam10
 
 usage:
-    java -cp .:../resources/* lab0.Driver ../resources/config.yaml bob
+    java -cp .:../resources/* driver.Driver ../resources/config.yaml a

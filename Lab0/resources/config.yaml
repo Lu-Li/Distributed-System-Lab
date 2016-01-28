@@ -6,30 +6,30 @@
 # These names will be used for src and dest addresses for the Message
 # The local node’s name is included in this list
 configuration :
-  - name : alice
+  - name : a
     ip : 192.168.1.52
     port : 10010    # This is the incoming port on which MP will listen
                     # May be changed for further communication as usual
-  - name : bob
+  - name : b
     ip : 192.168.1.112
     port : 10020
   - name : c
-    ip : 172.29.92.200
+    ip : 10.0.0.8
     port : 10030
   - name : d
-    ip : 172.29.92.200
+    ip : 10.0.0.8
     port : 10040
 
 sendRules :
   - action : drop # Ack message number 4 from bob to alice will not be sent
-    src : bob
-    dest : alice
+    src : b
+    dest : a
     kind : Ack
-    seqNum : 4
+    seqNum : 2
   - action : dropAfter # Daphnie will stop sending Reply messages after seq#6
     kind : Reply
     src : d
-    seqNum : 6
+    seqNum : 3
 
 receiveRules :
   - action : delay # Everyone sees two copies of charlie's messages
