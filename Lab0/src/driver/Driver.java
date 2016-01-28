@@ -10,6 +10,13 @@ import socket.Listener;
 public class Driver {
 
 	private static void test() {
+		MessagePasser.init(null, "b");
+		Message msg = new Message("a", "Ack", "ss");
+		MessagePasser.send(msg);
+		MessagePasser.send(msg);
+		MessagePasser.send(msg);
+		
+		
 		List<String> names = MessagePasser.getAllNames();
 		for (String name : names)
 			System.out.println(name);
@@ -64,6 +71,7 @@ public class Driver {
 						System.out.println("No message!");
 						break;
 					}
+					System.out.println("seq:" + message.getSeqNum());
 					System.out.println("src:" + message.getSrc());
 					System.out.println("kind:" + message.getKind());
 					System.out.println("content:" + message.getData().toString());

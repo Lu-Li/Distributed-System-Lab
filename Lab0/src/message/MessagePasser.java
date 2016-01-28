@@ -79,7 +79,7 @@ public class MessagePasser {
 		if (seqNumber == null)
 			seqNumber = new Integer(0);
 		else 
-			seq = seqNumber++;
+			seq = ++seqNumber;
 		seqNumberMap.put(src, seqNumber);
 		
 		// set message parameters
@@ -95,11 +95,17 @@ public class MessagePasser {
 				sendMessageBySocket(delayedMessage);
 			}
 			sendMessageBySocket(message);
+			System.err.println("[MsgPasser] Send - NoAction");
 			break;
 		case Delay:
 			delayQueue.add(message);
+			System.err.println("[MsgPasser] Send - Delay");
+			break;
 		case Drop:
+			System.err.println("[MsgPasser] Send - Drop");
+			break;
 		case DropAfter:
+			System.err.println("[MsgPasser] Send - DropAfter");
 			break;
 		}
 	}
@@ -127,7 +133,9 @@ public class MessagePasser {
 		switch (action) {
 		case NoAction:
 			countNonDelay ++ ;
-			System.err.println("[MsgPasser] Callback - NoAction "+countNonDelay+"/"+receiveQueue.size()+1);
+			receiveQueue.add(message);
+			System.err.println("[MsgPasser] Callback - NoAction "+countNonDelay+"/"+receiveQueue.size());
+			break;
 		case Delay:
 			receiveQueue.add(message);
 			System.err.println("[MsgPasser] Callback - Delay "+countNonDelay+"/"+receiveQueue.size());

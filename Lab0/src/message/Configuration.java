@@ -28,7 +28,7 @@ public class Configuration {
 	// ==============================================================
 	
 	public Configuration() {
-		this("src/main/resources/config.yaml");
+		this("resources/config.yaml");
 	}
 
 	public Configuration(String filepath) {
@@ -114,12 +114,14 @@ public class Configuration {
 			if (rule.get("kind") != null && !message.getKind().equals(rule.get("kind")))
 				continue;
 			String action = (String) rule.get("action");
+			Integer seqNum = (Integer)rule.get("seqNum");
+			
 			if (action.equals("dropAfter")) {
-				if (rule.get("seqNum") != null && message.getSeqNum() < (Integer) rule.get("seqNum"))
+				if (seqNum != null && (int)message.getSeqNum() < (int)seqNum)
 					continue;
 				return Action.DropAfter;
 			} else {
-				if (rule.get("seqNum") != null && message.getSeqNum() != (Integer) rule.get("seqNum"))
+				if (seqNum != null && (int)message.getSeqNum() != (int)seqNum)
 					continue;
 				if (action.equals("drop"))
 					return Action.Drop;
