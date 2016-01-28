@@ -37,7 +37,7 @@ public class Listener extends Thread{
 				MessagePasser.getMessageFromSocketCallback(firIn);
 				
 				// Create a new thread to receive message from this new connection.
-				new Receiver(ois).start();
+				new Receiver(ois, name).start();
                 
                 // listen again until connected to all processes
                 count++;

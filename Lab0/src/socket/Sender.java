@@ -60,7 +60,7 @@ public class Sender extends Thread {
 
 					// Create a new thread to receive message from this new
 					// connection.
-					Thread thread = new Thread(new Receiver(ois));
+					Thread thread = new Thread(new Receiver(ois, serverName));
 					thread.start();
 				} else {
 					System.err.println("[Sender] send message using reused socket");
