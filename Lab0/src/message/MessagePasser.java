@@ -18,10 +18,9 @@ public class MessagePasser {
 	
 	// Destination -> SequenceID
 	private static Map<String,Integer> seqNumberMap = new HashMap<String, Integer>();
-	// Received non-delay messages
-	private static int countNonDelay = 0;
 	// Queue for receiving
 	private static Queue<Message> receiveQueue = new LinkedList<Message>();
+	private static Queue<Message> delayReceiveQueue = new LinkedList<Message>();
 	// Queue for sending
 	private static Queue<Message> delayQueue = new LinkedList<Message>();
 
@@ -122,17 +121,13 @@ public class MessagePasser {
 	}
 
 	public static Message receive() {
-		System.err.println("[MsgPasser] receive: "+countNonDelay+"/"+receiveQueue.size());
+		System.err.println("[MsgPasser] receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
 		// if no message or  all are delayed message, return null
-		if (countNonDelay == 0){
+		if (receiveQueue.isEmpty()){
 			return null;
 		} else {
-			// get a message from the messageQueue
-			Message message = receiveQueue.poll();
-			Action action = config.getAction(message, Direction.Receive);
-			if (action == Action.NoAction)
-				countNonDelay--;
-			return message;
+			// get a message from the messageQueue			
+			return receiveQueue.poll();
 		}
 	}
 
@@ -143,13 +138,16 @@ public class MessagePasser {
 		Action action = config.getAction(message, Direction.Receive);
 		switch (action) {
 		case NoAction:
-			countNonDelay ++ ;
 			receiveQueue.add(message);
-			System.err.println("[MsgPasser] Callback - NoAction "+countNonDelay+"/"+receiveQueue.size());
+			while (!delayReceiveQueue.isEmpty()){
+				Message delayMessage = delayReceiveQueue.poll();
+				receiveQueue.add(delayMessage);
+			}
+			System.err.println("[MsgPasser] Callback - NoAction " + receiveQueue.size()+"/"+delayReceiveQueue.size());
 			break;
 		case Delay:
-			receiveQueue.add(message);
-			System.err.println("[MsgPasser] Callback - Delay "+countNonDelay+"/"+receiveQueue.size());
+			delayReceiveQueue.add(message);
+			System.err.println("[MsgPasser] Callback - Delay " + receiveQueue.size()+"/"+delayReceiveQueue.size());
 			break;
 		case Drop:
 			System.err.println("[MsgPasser] Callback - Drop");
@@ -168,7 +166,5 @@ public class MessagePasser {
 		Listener.setFlagFalse();
 		Sender.setFlagFalse();
 		Receiver.setFlagFalse();
-		
-//		SessionMap.closeAll();
 	}
 }

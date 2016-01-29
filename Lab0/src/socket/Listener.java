@@ -2,6 +2,7 @@ package socket;
 
 import java.io.*;
 import java.net.*;
+import java.util.LinkedList;
 
 import message.Message;
 import message.MessagePasser;
@@ -12,17 +13,29 @@ public class Listener extends Thread {
 	private static Socket socket;
 	private static ServerSocket sersoc;
 	
+	private static LinkedList<ObjectInputStream> receivers = new LinkedList<>();
+	
 	public Listener(int port) {
 		this.port = port;
 	}
 
 	public static void setFlagFalse() {
+		//Close Sockets
 		try {
 			if (sersoc != null)
 				sersoc.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//Close streams for generated Receivers
+		for (ObjectInputStream ois : receivers)
+			try {
+				ois.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		flag = false;
 	}
 
@@ -50,7 +63,10 @@ public class Listener extends Thread {
 
 				// Create a new thread to receive message from this new
 				// connection.
-				new Receiver(ois, name).start();
+				
+				Receiver receiver = new Receiver(ois, name);
+				receivers.add(ois);
+				receiver.start();
 			}
 			sersoc.close();
 		} catch (SocketException e) {
