@@ -24,6 +24,7 @@ public class Sender extends Thread {
 	}
 	
 	public static void setFlagFalse() {
+		queue.add(new Message(null, null, null));
 		flag = false;
 	}
 	
@@ -35,6 +36,8 @@ public class Sender extends Thread {
 			try {
 				// block while queue is empty
 				Message message = queue.take();
+				if (!flag)
+					break;
 				
 				System.err.println("[Sender] about to send message: kind = "+ message.getKind());
 				

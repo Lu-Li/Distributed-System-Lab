@@ -25,6 +25,11 @@ public class MessagePasser {
 	// Queue for sending
 	private static Queue<Message> delayQueue = new LinkedList<Message>();
 
+	
+	//Socket
+	private static Listener listener;
+	private static Sender sender;
+	
 	// MARK: Configuration API
 	// ==============================================================
 
@@ -70,8 +75,12 @@ public class MessagePasser {
 		src = local_name;
 		
 		Integer port = config.getPortNumberForName(local_name);
-		new Listener(port).start();
-		new Sender().start();
+		
+		listener = new Listener(port);
+		listener.start();
+		
+		sender = new Sender();
+		sender.start();
 	}
 
 	public static void send(Message message) {
@@ -159,6 +168,7 @@ public class MessagePasser {
 		Listener.setFlagFalse();
 		Sender.setFlagFalse();
 		Receiver.setFlagFalse();
-		SessionMap.closeAll();
+		
+//		SessionMap.closeAll();
 	}
 }

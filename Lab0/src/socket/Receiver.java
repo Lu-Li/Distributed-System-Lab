@@ -9,12 +9,12 @@ import java.util.HashMap;
 import message.Message;
 import message.MessagePasser;
 
-public class Receiver extends Thread{
+public class Receiver extends Thread {
 
 	private ObjectInputStream ois;
 	private String name;
 	private static boolean flag = true;
-	
+
 	public Receiver(ObjectInputStream ois, String name) {
 		this.ois = ois;
 		this.name = name;
@@ -23,7 +23,7 @@ public class Receiver extends Thread{
 	public static void setFlagFalse() {
 		flag = false;
 	}
-	
+
 	public void run() {
 		Message message = null;
 		System.err.println("[Receiver] started");
@@ -36,16 +36,8 @@ public class Receiver extends Thread{
 				}
 				Thread.sleep(1);
 			}
-		} catch (EOFException|SocketException e) {
-			try {
-				HashMap<String, StreamPair> stream = SessionMap.getSessionMap();
-				StreamPair sp = stream.get(name);
-				sp.getOos().close();
-				ois.close();
-				SessionMap.removeStreamPair(name);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+		} catch (EOFException | SocketException e) {
+			// let messagepasser close all streams
 		} catch (ClassNotFoundException | IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
