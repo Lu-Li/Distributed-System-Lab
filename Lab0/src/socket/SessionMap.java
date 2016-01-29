@@ -1,6 +1,8 @@
 package socket;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SessionMap {
 	// <name, stream>
@@ -21,5 +23,21 @@ public class SessionMap {
 	
 	public static void removeStreamPair(String serverName) {
 		sessionMap.remove(serverName);
+	}
+	
+	public static void closeAll() {
+		for (Map.Entry<String, StreamPair> entry : sessionMap.entrySet()) {
+			StreamPair sp = entry.getValue();
+			try {
+				sp.getOos().close();
+				sp.getOis().close();
+				sp.setOis(null);
+				sp.setOos(null);
+			} catch (IOException e) {
+				System.err.println("close stream error");
+				e.printStackTrace();
+			}
+		}
+		sessionMap.clear();
 	}
 }

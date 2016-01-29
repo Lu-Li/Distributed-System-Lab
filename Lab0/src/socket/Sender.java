@@ -12,6 +12,7 @@ import message.MessagePasser;
 public class Sender extends Thread {
 
 	private static final BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
+	private static boolean flag = true;
 
 	// call this function to add message to queue whenever want to send msg
 	public static void addMsg(Message msg) {
@@ -21,10 +22,15 @@ public class Sender extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public static void setFlagFalse() {
+		flag = false;
+	}
+	
 	public void run() {
 		System.err.println("[Sender] started");
-		while (true) {
+		Socket socket = null;
+		while (flag) {
 			try {
 				// block while queue is empty
 				Message message = queue.take();
@@ -44,7 +50,7 @@ public class Sender extends Thread {
 					String serverIp = MessagePasser.getIpStringForName(serverName);
 					int serverPort = MessagePasser.getPortNumberForName(serverName);
 
-					Socket socket = new Socket(serverIp, serverPort);
+					socket = new Socket(serverIp, serverPort);
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					ois = new ObjectInputStream(socket.getInputStream());
 
@@ -76,8 +82,15 @@ public class Sender extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			
 		}
+		// terminate socket
+		if (socket != null)
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 }

@@ -8,17 +8,21 @@ import message.MessagePasser;
 
 public class Listener extends Thread{
 	private int port;
+	private static boolean flag = true;
 
 	public Listener(int port) {
 		this.port = port;
+	}
+
+	public static void setFlagFalse() {
+		flag = false;
 	}
 
 	public void run() {
 		ServerSocket sersoc;
 		try {
 			sersoc = new ServerSocket(this.port);
-			int count = 0;
-			while (count < 3) {
+			while (flag) {
 				System.err.println("[Listener] starts");
 				Socket socket = sersoc.accept();
 								
@@ -38,14 +42,11 @@ public class Listener extends Thread{
 				
 				// Create a new thread to receive message from this new connection.
 				new Receiver(ois, name).start();
-                
-                // listen again until connected to all processes
-                count++;
 			}
+			sersoc.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}

@@ -6,7 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import message.Configuration.*;
 import socket.Listener;
+import socket.Receiver;
 import socket.Sender;
+import socket.SessionMap;
 
 public class MessagePasser {
 	// Local name
@@ -151,5 +153,12 @@ public class MessagePasser {
 	
 	public static void sendMessageBySocket(Message message){		
 		Sender.addMsg(message);
+	}
+	
+	public static void terminateAll() {
+		Listener.setFlagFalse();
+		Sender.setFlagFalse();
+		Receiver.setFlagFalse();
+		SessionMap.closeAll();
 	}
 }
