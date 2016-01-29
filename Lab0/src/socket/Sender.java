@@ -30,6 +30,7 @@ public class Sender extends Thread {
 	public void run() {
 		System.err.println("[Sender] started");
 		Socket socket = null;
+		flag = true;
 		while (flag) {
 			try {
 				// block while queue is empty

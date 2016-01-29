@@ -22,6 +22,7 @@ public class Listener extends Thread{
 		ServerSocket sersoc;
 		try {
 			sersoc = new ServerSocket(this.port);
+			flag = true;
 			while (flag) {
 				System.err.println("[Listener] starts");
 				Socket socket = sersoc.accept();

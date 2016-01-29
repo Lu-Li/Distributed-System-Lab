@@ -47,7 +47,7 @@ public class Driver {
 			System.out.println("=======================");
 			System.out.println("1. Send a Message");
 			System.out.println("2. Receive a Message");
-			System.out.println("other: exit");
+			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
 
@@ -78,8 +78,8 @@ public class Driver {
 					break;
 
 				default:
-					done = true;
-					break;
+					MessagePasser.terminateAll();
+					return;
 				}				
 			} catch (InputMismatchException e) {
 				System.out.println("INPUT MISMATCH!");

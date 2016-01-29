@@ -3,6 +3,7 @@ package socket;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.SocketException;
 import java.util.HashMap;
 
 import message.Message;
@@ -26,6 +27,7 @@ public class Receiver extends Thread{
 	public void run() {
 		Message message = null;
 		System.err.println("[Receiver] started");
+		flag = true;
 		try {
 			while (flag) {
 				if ((message = (Message) (ois.readObject())) != null) {
@@ -34,7 +36,7 @@ public class Receiver extends Thread{
 				}
 				Thread.sleep(1);
 			}
-		} catch (EOFException e) {
+		} catch (EOFException|SocketException e) {
 			try {
 				HashMap<String, StreamPair> stream = SessionMap.getSessionMap();
 				StreamPair sp = stream.get(name);
