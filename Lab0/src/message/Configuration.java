@@ -42,10 +42,10 @@ public class Configuration {
 			sendRules = (List<Map>) config.get("sendRules");
 			receiveRules = (List<Map>) config.get("receiveRules");
 
-			System.out.println("- Init:");
-			System.out.println("network config:" + network);
-			System.out.println("send rules:" + sendRules);
-			System.out.println("receive rules:" + receiveRules);
+			System.out.println();
+			System.out.println("[CONFIG] " + network);
+			System.out.println("[SEND] " + sendRules);
+			System.out.println("[RECEIVE] " + receiveRules);
 			System.out.println();
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found!");
