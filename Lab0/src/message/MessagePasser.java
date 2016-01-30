@@ -14,6 +14,7 @@ public class MessagePasser {
 	// Local name
 	private static String src = null;
 	// Configuration Object. 
+	private static String configurationFileName;
 	private static Configuration config = null;
 	
 	// Destination -> SequenceID
@@ -67,8 +68,9 @@ public class MessagePasser {
 	// ==============================================================
 	
 	public static void init(String configuration_filename, String local_name) {
-		if (configuration_filename != null)
-			config = new Configuration(configuration_filename);
+		configurationFileName = configuration_filename;
+		if (configurationFileName != null)
+			config = new Configuration(configurationFileName);
 		else
 			config = new Configuration();
 		src = local_name;
@@ -83,6 +85,13 @@ public class MessagePasser {
 	}
 
 	public static void send(Message message) {
+		// re-read configuration file
+		if (configurationFileName != null)
+			config = new Configuration(configurationFileName);
+		else
+			config = new Configuration();
+
+		
 		// get sequence number from hashmap
 		Integer seqNumber = seqNumberMap.get(src);
 		int seq = 0;
@@ -135,6 +144,13 @@ public class MessagePasser {
 	// ==============================================================
 
 	public static void getMessageFromSocketCallback(Message message){
+		// re-read configuration file
+		if (configurationFileName != null)
+			config = new Configuration(configurationFileName);
+		else
+			config = new Configuration();
+
+		// find corresponding action
 		Action action = config.getAction(message, Direction.Receive);
 		switch (action) {
 		case NoAction:
