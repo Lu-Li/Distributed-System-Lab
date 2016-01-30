@@ -14,23 +14,25 @@ configuration :
     ip : 10.0.23.147
     port : 10020
   - name : c
-    ip : 10.0.23.107
+    ip : 10.0.23.147
     port : 10030
   - name : d
-    ip : 10.0.23.107
+    ip : 10.0.23.147
     port : 10040
 
 sendRules :
-  - action : drop # Ack message number 4 from bob to alice will not be sent
+  - action : delay
     src : b
-    dest : a
-    kind : Ack
-    seqNum : 2
-  - action : dropAfter # Daphnie will stop sending Reply messages after seq#6
-    kind : Reply
-    src : d
-    seqNum : 3
+    dest : d
+  - action : drop 
+    src : b
+    dest : c
 
 receiveRules :
-  - action : delay # Everyone sees two copies of charlie's messages
-    src : b # even though he only sends one
+  - action : delay
+    src : b
+    dest : d
+  - action : drop 
+    src : c
+    dest : d
+
