@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 
+import driver.Log;
 import message.Message;
 import message.MessagePasser;
 
@@ -44,18 +45,23 @@ public class Listener extends Thread {
 			sersoc = new ServerSocket(this.port);
 			flag = true;
 			while (flag) {
-				System.err.println("[Listener] starts");
+				Log.info("Listener", "started");
+				
 				socket = sersoc.accept();
 
-				System.err.println("[Listener] socket connection accepted");
+				Log.info("Listener", "socket connection accepted");
+				
 				ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 				Message firIn = (Message) ois.readObject();
 
-				System.err.println("[Listener] get First message: kind = " + firIn.getKind());
+				Log.info("Listener", "get First message: kind = " + firIn.getKind());
+				
 				Message firOut = new Message(firIn.getSrc(), "confirm", "first message");
 				oos.writeObject(firOut);
-				System.err.println("[Listener] reply First message");
+
+				Log.info("Listener", "reply First message");
+				
 				String name = firIn.getSrc();
 				StreamPair pair = new StreamPair(ois, oos);
 				SessionMap.addStreamPair(name, pair);

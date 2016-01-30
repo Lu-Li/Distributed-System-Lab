@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import driver.Log;
 import message.Message;
 import message.MessagePasser;
 
@@ -29,7 +30,8 @@ public class Sender extends Thread {
 	}
 	
 	public void run() {
-		System.err.println("[Sender] started");
+		Log.info("Sender", "started");
+	
 		Socket socket = null;
 		flag = true;
 		while (flag) {
@@ -39,7 +41,7 @@ public class Sender extends Thread {
 				if (!flag)
 					break;
 				
-				System.err.println("[Sender] about to send message: kind = "+ message.getKind());
+				Log.info("Sender", "about to send message: kind = "+ message.getKind());
 				
 				String serverName = message.getDest();
 				HashMap<String, StreamPair> stream = SessionMap.getSessionMap();
@@ -58,14 +60,15 @@ public class Sender extends Thread {
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					ois = new ObjectInputStream(socket.getInputStream());
 
-					System.err.println("[Sender] send message using new socket");
+					Log.info("Sender", "send message using new socket");
+
 					oos.writeObject(message);
 					
 					// no need to store to receive queue since this first
 					// response is only to set up connection
 					Message firstRep = (Message) ois.readObject();
 
-					System.err.println("[Sender] first response from new connection : " + firstRep.getData());
+					Log.info("Sender", "first response from new connection : " + firstRep.getData());
 					stream.put(serverName, new StreamPair(ois, oos));
 
 					// Create a new thread to receive message from this new
@@ -73,7 +76,7 @@ public class Sender extends Thread {
 					Thread thread = new Thread(new Receiver(ois, serverName));
 					thread.start();
 				} else {
-					System.err.println("[Sender] send message using reused socket");
+					Log.info("Sender", "send message using reused socket");
 					oos.writeObject(message);
 				}
 

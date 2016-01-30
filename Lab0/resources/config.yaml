@@ -14,10 +14,10 @@ configuration :
     ip : 10.0.23.147
     port : 10020
   - name : c
-    ip : 10.0.23.147
+    ip : 10.0.23.107
     port : 10030
   - name : d
-    ip : 10.0.23.147
+    ip : 10.0.23.107
     port : 10040
 
 sendRules :

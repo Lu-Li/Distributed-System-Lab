@@ -2,6 +2,8 @@ package message;
 
 import org.yaml.snakeyaml.Yaml;
 
+import driver.Log;
+
 import java.io.*;
 import java.util.*;
 
@@ -43,9 +45,9 @@ public class Configuration {
 			receiveRules = (List<Map>) config.get("receiveRules");
 
 			System.out.println();
-			System.out.println("[CONFIG] " + network);
-			System.out.println("[SEND] " + sendRules);
-			System.out.println("[RECEIVE] " + receiveRules);
+			Log.verbose("CONFIG", network.toString());
+			Log.verbose("SEND", sendRules.toString());
+			Log.verbose("RECEIVE", receiveRules.toString());
 			System.out.println();
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found!");

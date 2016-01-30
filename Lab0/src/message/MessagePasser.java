@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import driver.Log;
 import message.Configuration.*;
 import socket.Listener;
 import socket.Receiver;
@@ -114,23 +115,23 @@ public class MessagePasser {
 				sendMessageBySocket(delayedMessage);
 			}
 			sendMessageBySocket(message);
-			System.err.println("[MsgPasser] Send - NoAction");
+			Log.info("MsgPasser", "Send - NoAction");
 			break;
 		case Delay:
 			delayQueue.add(message);
-			System.err.println("[MsgPasser] Send - Delay");
+			Log.info("MsgPasser", "Send - Delay");
 			break;
 		case Drop:
-			System.err.println("[MsgPasser] Send - Drop");
+			Log.info("MsgPasser", "Send - Drop");
 			break;
 		case DropAfter:
-			System.err.println("[MsgPasser] Send - DropAfter");
+			Log.info("MsgPasser", "Send - DropAfter");
 			break;
 		}
 	}
 
 	public static Message receive() {
-		System.err.println("[MsgPasser] receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
+		Log.info("MsgPasser", "receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
 		// if no message or  all are delayed message, return null
 		if (receiveQueue.isEmpty()){
 			return null;
@@ -159,17 +160,17 @@ public class MessagePasser {
 				Message delayMessage = delayReceiveQueue.poll();
 				receiveQueue.add(delayMessage);
 			}
-			System.err.println("[MsgPasser] Callback - NoAction " + receiveQueue.size()+"/"+delayReceiveQueue.size());
+			Log.info("MsgPasser", "Callback - NoAction " + receiveQueue.size()+"/"+delayReceiveQueue.size());
 			break;
 		case Delay:
 			delayReceiveQueue.add(message);
-			System.err.println("[MsgPasser] Callback - Delay " + receiveQueue.size()+"/"+delayReceiveQueue.size());
+			Log.info("MsgPasser", "Callback - Delay " + receiveQueue.size()+"/"+delayReceiveQueue.size());
 			break;
 		case Drop:
-			System.err.println("[MsgPasser] Callback - Drop");
+			Log.info("MsgPasser", "Callback - Drop");
 			break;
 		case DropAfter:
-			System.err.println("[MsgPasser] Callback - DropAfter");
+			Log.info("MsgPasser", "Callback - DropAfter");
 			break;
 		}		
 	}

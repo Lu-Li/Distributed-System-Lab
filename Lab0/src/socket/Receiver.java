@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.util.HashMap;
 
+import driver.Log;
 import message.Message;
 import message.MessagePasser;
 
@@ -26,12 +27,12 @@ public class Receiver extends Thread {
 
 	public void run() {
 		Message message = null;
-		System.err.println("[Receiver] started");
+		Log.info("Receiver", "started");
 		flag = true;
 		try {
 			while (flag) {
 				if ((message = (Message) (ois.readObject())) != null) {
-					System.err.println("[Receiver] message: " + message.getData() + " from " + message.getSrc());
+					Log.info("Receiver", "message: " + message.getData() + " from " + message.getSrc());
 					MessagePasser.getMessageFromSocketCallback(message);
 				}
 				Thread.sleep(1);
