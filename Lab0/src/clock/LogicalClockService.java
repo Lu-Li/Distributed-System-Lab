@@ -4,6 +4,7 @@ import message.Message;
 
 public class LogicalClockService extends ClockService{
 
+	public LogicalClockService() {};
 	public LogicalClockService(TimeStamp ts) {
 		super(ts);
 		// TODO Auto-generated constructor stub

@@ -1,5 +1,5 @@
 package clock;
 
-public class TimeStamp {
+public abstract class TimeStamp implements Comparable {
 
 }

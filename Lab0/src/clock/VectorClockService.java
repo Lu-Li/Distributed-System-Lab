@@ -4,6 +4,7 @@ import message.Message;
 
 public class VectorClockService extends ClockService{
 
+	public VectorClockService() {};
 	public VectorClockService(TimeStamp ts) {
 		super(ts);
 		// TODO Auto-generated constructor stub

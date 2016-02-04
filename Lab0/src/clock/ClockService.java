@@ -6,6 +6,7 @@ public abstract class ClockService {
 	
 	private static TimeStamp timestamp;
 	
+	public ClockService() {};
 	public ClockService(TimeStamp ts) {
 		timestamp = ts;
 	}
