@@ -7,32 +7,26 @@
 # The local node’s name is included in this list
 configuration :
   - name : a
-    ip : 10.0.23.147
+    ip : 10.0.18.5
     port : 10010    # This is the incoming port on which MP will listen
                     # May be changed for further communication as usual
   - name : b
-    ip : 10.0.23.147
+    ip :  10.0.18.5
     port : 10020
   - name : c
-    ip : 10.0.23.147
+    ip : 10.0.17.55
     port : 10030
   - name : d
-    ip : 10.0.23.147
+    ip : 10.0.17.55
     port : 10040
 
 sendRules :
-  - action : delay
-    src : b
-    dest : d
-  - action : drop 
-    src : b
-    dest : c
+  - action : dropAfter 
+    src : a
+    seqNum: 4
 
 receiveRules :
-  - action : delay
-    src : b
-    dest : d
-  - action : drop 
-    src : c
-    dest : d
+  - action : dropAfter 
+    dest : c
+    seqNum: 4
 

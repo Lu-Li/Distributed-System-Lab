@@ -1,24 +1,28 @@
 package clock;
 
 import message.Message;
+import message.MessagePasser;
 
-public class VectorClockService extends ClockService{
+public class VectorClockService extends ClockService {
 
-	public VectorClockService() {};
+	public VectorClockService(int size) {
+		this.timestamp = new VectorTimeStamp(size);
+	};
+
 	public VectorClockService(TimeStamp ts) {
 		super(ts);
-		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public TimeStamp getTimeStamp() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.timestamp;
 	}
 
 	@Override
 	public TimeStamp updateTimeStamp(Message message) {
-		// TODO Auto-generated method stub
+		if (message.getSrc().equals(MessagePasser.getLocalName())){
+			// TODO : increment corresponding clock item
+		}
 		return null;
 	}
 

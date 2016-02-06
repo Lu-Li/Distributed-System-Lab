@@ -1,28 +1,53 @@
 package clock;
 
+import driver.Log;
+
 public class ClockServiceFactory {
-	// TODO: is this function needed? given a initial timestamp value?
-	public static ClockService getClockService (String clockType, TimeStamp ts){
-	      if(clockType == null) {
-	         return null;
-	      }		
-	      if(clockType.equalsIgnoreCase("Logical")) {
-	         return new LogicalClockService(ts);	         
-	      } else if(clockType.equalsIgnoreCase("Vector")) {
-	         return new VectorClockService(ts);         
-	      }	      
-	      return null;
-	   }
+	private static ClockService currentClockService;
+	private static String currentClockType = null;
+
+	public static ClockService setClockService(String clockType, TimeStamp ts) {
+		if (clockType == null) {
+			return null;
+		}
+		if (currentClockType != null && !clockType.equalsIgnoreCase(currentClockType))
+			Log.error("ClockServiceFactory", "Clock type changed");
+		currentClockType = clockType;
+		if (clockType.equalsIgnoreCase("Logical")) {
+			if (currentClockService == null)
+				currentClockService = new LogicalClockService(ts);
+			return currentClockService;
+		} else if (clockType.equalsIgnoreCase("Logical")) {
+			if (currentClockService == null)
+				currentClockService = new VectorClockService(ts);
+			return currentClockService;
+		}
+		return null;
+	}
+
+	public static ClockService setClockService(String clockType, int size) {
+		if (clockType == null) {
+			return null;
+		}
+		if (currentClockType != null && !clockType.equalsIgnoreCase(currentClockType))
+			Log.error("ClockServiceFactory", "Clock type changed");
+		currentClockType = clockType;
+		if (clockType.equalsIgnoreCase("Logical")) {
+			if (currentClockService == null)
+				currentClockService = new LogicalClockService();
+			return currentClockService;
+		} else if (clockType.equalsIgnoreCase("Logical")) {
+			if (currentClockService == null)
+				currentClockService = new VectorClockService(size);
+			return currentClockService;
+		}
+
+		return null;
+	}
 	
-	public static ClockService getClockService (String clockType){
-	      if(clockType == null) {
-	         return null;
-	      }		
-	      if(clockType.equalsIgnoreCase("Logical")) {
-	         return new LogicalClockService();	         
-	      } else if(clockType.equalsIgnoreCase("Vector")) {
-	         return new VectorClockService();         
-	      }	      
-	      return null;
-	   }
+	public static ClockService getClockService() {
+		if (currentClockType == null || currentClockService == null)
+			Log.error("ClockServiceFactory", "Clock service not initialized");		
+		return currentClockService;
+	}
 }

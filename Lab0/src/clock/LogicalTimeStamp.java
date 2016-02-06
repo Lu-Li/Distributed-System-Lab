@@ -1,11 +1,23 @@
 package clock;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import driver.Log;
+
 public class LogicalTimeStamp extends TimeStamp{
 
+	private Integer logicalTime = 0;
+	
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (o instanceof LogicalTimeStamp){
+			//get vector of the other timestamp
+			LogicalTimeStamp logicalTimeStamp = (LogicalTimeStamp)o;			
+			Integer otherTime = logicalTimeStamp.logicalTime;
+			
+			return logicalTime.compareTo(otherTime);
+		} else throw new ClassCastException();
 	}
 
 }

@@ -20,7 +20,8 @@ public class TestDriver {
 		}
 		// init MessagePasser, read configuration file and start listening
 		System.out.println("Welcome to team22-lab1");
-		ClockService cs = ClockServiceFactory.getClockService(args[2]);
+		// TODO : init clock service
+		//ClockService cs = ClockServiceFactory.setClockService(args[2]);
 		MessagePasser.init(args[0], args[1]);
 		Logger logger = new Logger(args[0], args[1]);
 
@@ -67,7 +68,7 @@ public class TestDriver {
 					logger.dumpMessage();
 					break;
 				case 4:
-					TimeStamp ts = cs.getTimeStamp();
+					TimeStamp ts = ClockServiceFactory.getClockService().getTimeStamp();
 					System.out.println("Current timeStamp is" + ts);
 				default:
 					MessagePasser.terminateAll();
