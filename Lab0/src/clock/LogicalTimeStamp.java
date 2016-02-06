@@ -9,6 +9,13 @@ public class LogicalTimeStamp extends TimeStamp{
 
 	private Integer logicalTime = 0;
 	
+	public Integer getLogicalTime() {
+		return this.logicalTime;
+	}
+	
+	public void setLogicalTime(Integer lt) {
+		this.logicalTime = lt;
+	}
 	@Override
 	public int compareTo(Object o) {
 		if (o instanceof LogicalTimeStamp){
