@@ -1,13 +1,13 @@
 package clock;
 
 import message.Message;
+import message.TimestampedMessage;
 
 public class LogicalClockService extends ClockService{
 
 	public LogicalClockService() {};
 	public LogicalClockService(TimeStamp ts) {
 		super(ts);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class LogicalClockService extends ClockService{
 	}
 
 	@Override
-	public TimeStamp updateTimeStamp(Message message) {
+	public TimeStamp updateTimeStamp(TimestampedMessage message) {
 		// TODO Auto-generated method stub
 		return null;
 	}

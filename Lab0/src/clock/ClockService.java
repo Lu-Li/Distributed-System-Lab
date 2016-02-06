@@ -2,6 +2,7 @@ package clock;
 
 import driver.Log;
 import message.Message;
+import message.TimestampedMessage;
 
 public abstract class ClockService {
 
@@ -16,5 +17,5 @@ public abstract class ClockService {
 
 	public abstract TimeStamp getTimeStamp();
 
-	public abstract TimeStamp updateTimeStamp(Message message);
+	public abstract TimeStamp updateTimeStamp(TimestampedMessage message);
 }

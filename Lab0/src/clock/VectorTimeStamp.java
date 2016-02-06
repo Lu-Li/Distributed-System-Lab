@@ -19,8 +19,16 @@ public class VectorTimeStamp extends TimeStamp {
 	}
 	
 	
-	public void increment(int position) {
+	public void incrementVectorItem(int position) {
 		vector.set(position, vector.get(position)+1);
+	}
+	
+	public int getVectorItem(int index) {
+		return vector.get(index).intValue();
+	}
+	
+	public void setVectorItem(int position, int time) {
+		vector.set(position, time);
 	}
 	
 	@Override

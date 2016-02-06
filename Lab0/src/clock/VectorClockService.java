@@ -1,10 +1,17 @@
 package clock;
 
-import message.Message;
+import java.util.List;
+
+import driver.Log;
 import message.MessagePasser;
+import message.TimestampedMessage;
 
 public class VectorClockService extends ClockService {
 
+	/**
+	 * initializer
+	 * @param size : count of nodes in the system
+	 */
 	public VectorClockService(int size) {
 		this.timestamp = new VectorTimeStamp(size);
 	};
@@ -12,18 +19,52 @@ public class VectorClockService extends ClockService {
 	public VectorClockService(TimeStamp ts) {
 		super(ts);
 	}
-	
+		
+	/**
+	 * current timestamp getter
+	 */
 	@Override
 	public TimeStamp getTimeStamp() {
 		return this.timestamp;
 	}
 
 	@Override
-	public TimeStamp updateTimeStamp(Message message) {
+	public TimeStamp updateTimeStamp(TimestampedMessage message) {
+		List<String> names = MessagePasser.getAllNames();
+		
+		// message sent
 		if (message.getSrc().equals(MessagePasser.getLocalName())){
-			// TODO : increment corresponding clock item
+			TimeStamp timeStamp = message.getTimeStamp();
+			if (timeStamp instanceof VectorTimeStamp){
+				VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)timeStamp;
+				int index = names.indexOf(message.getSrc());
+				vectorTimeStamp.incrementVectorItem(index);
+
+				//set current time for clockservice
+				this.timestamp = vectorTimeStamp;
+			} else Log.error("VectorClockService", "timestamp type error");
 		}
-		return null;
+
+		// message received
+		if (message.getDest().equals(MessagePasser.getLocalName())){
+			TimeStamp timeStamp = message.getTimeStamp();
+			if (timeStamp instanceof VectorTimeStamp){
+				VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)timeStamp;
+				int myIndex = names.indexOf(message.getDest());
+				int senderIndex = names.indexOf(message.getSrc());
+				
+				int myTime = vectorTimeStamp.getVectorItem(myIndex) + 1;
+				int senderTime = vectorTimeStamp.getVectorItem(senderIndex) + 1;
+				vectorTimeStamp.setVectorItem(myIndex, myTime>senderTime?myTime:senderTime);
+				
+				//set current time for clockservice
+				this.timestamp = vectorTimeStamp;
+			} else Log.error("VectorClockService", "timestamp type error");
+		}
+		
+		//set timestamp for message, not sure if is required
+		message.setTimeStamp(this.timestamp);
+		return this.timestamp;
 	}
 
 }
