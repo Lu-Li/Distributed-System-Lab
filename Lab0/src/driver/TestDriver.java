@@ -1,14 +1,12 @@
 package driver;
 
 import java.util.*;
-import java.util.zip.Inflater;
 
 import clock.ClockService;
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
 import message.Message;
 import message.MessagePasser;
-import socket.Listener;
 
 public class TestDriver {
 
@@ -30,8 +28,8 @@ public class TestDriver {
 		while (!done) {
 			Thread.sleep(300);
 			System.out.println("=======================");
-			System.out.println("1. send a Message to a logger");
-			System.out.println("2. Save a Message to logger");
+			System.out.println("1. send a Message");
+			System.out.println("2. recieve a Message");
 			System.out.println("3. dump all messages");
 			System.out.println("4. show timestamp");
 			System.out.println("other number: exit");

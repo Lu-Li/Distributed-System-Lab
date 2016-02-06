@@ -9,21 +9,6 @@ import socket.Listener;
 
 public class Driver {
 
-	private static void test() {
-		MessagePasser.init(null, "b");
-		Message msg = new Message("a", "Ack", "ss");
-		MessagePasser.send(msg);
-		MessagePasser.send(msg);
-		MessagePasser.send(msg);
-		
-		
-		List<String> names = MessagePasser.getAllNames();
-		for (String name : names)
-			System.out.println(name);
-
-		System.out.println(MessagePasser.getIpStringForName("bob"));
-	}
-
 	public static void main(String[] args) throws InterruptedException {
 		// Read arguments
 		int argn = args.length;
