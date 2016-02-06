@@ -15,7 +15,16 @@ public abstract class ClockService {
 		timestamp = ts;
 	}
 
+	/**
+	 * get current time
+	 * @return a TimeStamp instance representing current time
+	 */
 	public abstract TimeStamp getTimeStamp();
 
+	/**
+	 * update current time
+	 * @param message a message that is just received/sent
+	 * @return a TimeStamp instance representing current time after the update
+	 */
 	public abstract TimeStamp updateTimeStamp(TimestampedMessage message);
 }

@@ -28,6 +28,11 @@ public class VectorClockService extends ClockService {
 		return this.timestamp;
 	}
 
+	/**
+	 * update current time
+	 * @param message a message that is just received/sent
+	 * @return current time after the update
+	 */
 	@Override
 	public TimeStamp updateTimeStamp(TimestampedMessage message) {
 		List<String> names = MessagePasser.getAllNames();
