@@ -23,6 +23,12 @@ public class Broker{
 					Message m = null;
 					if ((m = MessagePasser.receive()) != null) 
 						handleMessage(m);
+					
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		};

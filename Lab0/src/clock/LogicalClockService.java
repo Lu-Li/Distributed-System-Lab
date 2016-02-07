@@ -5,7 +5,10 @@ import message.TimestampedMessage;
 
 public class LogicalClockService extends ClockService{
 
-	public LogicalClockService() {};
+	public LogicalClockService(){
+		this.timestamp = new LogicalTimeStamp();
+	}
+	
 	public LogicalClockService(TimeStamp ts) {
 		super(ts);
 	}

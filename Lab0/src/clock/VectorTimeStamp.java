@@ -47,7 +47,7 @@ public class VectorTimeStamp extends TimeStamp {
 	}
 	
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(TimeStamp o) {
 		if (o instanceof VectorTimeStamp){
 			//get vector of the other timestamp
 			VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)o;			
@@ -73,6 +73,11 @@ public class VectorTimeStamp extends TimeStamp {
 				return 1;
 			return 0;
 		} else throw new ClassCastException();
+	}
+	
+	@Override
+	public String toString() {		
+		return "VectorTimeStamp:"+vector.toString();
 	}
 
 }

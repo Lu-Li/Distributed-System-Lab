@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import application.Log;
+import clock.ClockServiceFactory;
 import message.Configuration.*;
 import socket.Listener;
 import socket.Receiver;
@@ -175,7 +176,8 @@ public class MessagePasser {
 		}		
 	}
 	
-	public static void sendMessageBySocket(Message message){		
+	public static void sendMessageBySocket(Message message){
+//		ClockServiceFactory.getClockService().updateTimeStamp(message);
 		Sender.addMsg(message);
 	}
 	

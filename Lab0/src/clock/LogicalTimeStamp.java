@@ -17,7 +17,7 @@ public class LogicalTimeStamp extends TimeStamp{
 		this.logicalTime = lt;
 	}
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(TimeStamp o) {
 		if (o instanceof LogicalTimeStamp){
 			//get vector of the other timestamp
 			LogicalTimeStamp logicalTimeStamp = (LogicalTimeStamp)o;			
@@ -27,4 +27,8 @@ public class LogicalTimeStamp extends TimeStamp{
 		} else throw new ClassCastException();
 	}
 
+	@Override
+	public String toString() {		
+		return "LogicalTimeStamp:"+logicalTime;
+	}
 }

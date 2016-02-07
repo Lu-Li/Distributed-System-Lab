@@ -63,6 +63,7 @@ public class TestLogger {
 				case 3:
 					TimeStamp ts = ClockServiceFactory.getClockService().getTimeStamp();
 					System.out.println("Current timeStamp is" + ts);
+					break;
 				default:
 					MessagePasser.terminateAll();
 					return;

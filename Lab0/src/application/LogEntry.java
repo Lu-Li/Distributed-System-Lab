@@ -1,5 +1,7 @@
 package application;
 
+import java.io.Serializable;
+
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
 import message.Message;
@@ -7,7 +9,7 @@ import message.TimestampedMessage;
 /*
  * TODO: fix out a reasonable and beautiful content to log
  */
-public class LogEntry implements Comparable<LogEntry>{
+public class LogEntry implements Comparable<LogEntry>, Serializable{
 	private String message;
 	private TimeStamp timestamp;
 	
