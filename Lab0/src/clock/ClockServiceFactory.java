@@ -17,7 +17,7 @@ public class ClockServiceFactory {
 			if (currentClockService == null)
 				currentClockService = new LogicalClockService(ts);
 			return currentClockService;
-		} else if (clockType.equalsIgnoreCase("Logical")) {
+		} else if (clockType.equalsIgnoreCase("Vector")) {
 			if (currentClockService == null)
 				currentClockService = new VectorClockService(ts);
 			return currentClockService;
@@ -36,7 +36,7 @@ public class ClockServiceFactory {
 			if (currentClockService == null)
 				currentClockService = new LogicalClockService();
 			return currentClockService;
-		} else if (clockType.equalsIgnoreCase("Logical")) {
+		} else if (clockType.equalsIgnoreCase("Vector")) {
 			if (currentClockService == null)
 				currentClockService = new VectorClockService(size);
 			return currentClockService;

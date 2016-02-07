@@ -130,12 +130,12 @@ public class MessagePasser {
 		}
 	}
 
-	public static Message receive() {
-		Log.info("MsgPasser", "receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
+	public static Message receive() {		
 		// if no message or  all are delayed message, return null
 		if (receiveQueue.isEmpty()){
 			return null;
 		} else {
+			Log.info("MsgPasser", "receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
 			// get a message from the messageQueue			
 			return receiveQueue.poll();
 		}

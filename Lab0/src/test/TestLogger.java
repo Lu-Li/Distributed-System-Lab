@@ -24,7 +24,7 @@ public class TestLogger {
 		System.out.println("Welcome to team22-lab1");
 
 		// TODO : clean this mess, all sorts of init just make no sense
-		ClockServiceFactory.setClockService("Logical",4);
+		ClockServiceFactory.setClockService(args[2],4);
 		MessagePasser.init(args[0], args[1]);
 		Broker broker = new Broker();
 		Logger logger = new Logger(args[0], args[1]);

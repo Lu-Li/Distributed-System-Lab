@@ -15,6 +15,7 @@ public class Broker{
 	private Thread readMessageThread;
 	
 	public Broker() {
+		appMap = new HashMap<String, DistributedApplication>();
 		readMessageThread = new Thread(){
 			@Override
 			public void run() {
