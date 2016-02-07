@@ -1,7 +1,7 @@
 package message;
 
+import application.Log;
 import clock.TimeStamp;
-import driver.Log;
 
 public class TimestampedMessage extends Message {
 	private static final long serialVersionUID = 1L;

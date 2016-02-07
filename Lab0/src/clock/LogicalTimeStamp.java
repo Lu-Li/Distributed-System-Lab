@@ -3,7 +3,7 @@ package clock;
 import java.util.ArrayList;
 import java.util.List;
 
-import driver.Log;
+import application.Log;
 
 public class LogicalTimeStamp extends TimeStamp{
 

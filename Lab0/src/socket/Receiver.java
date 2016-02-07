@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.util.HashMap;
 
-import driver.Log;
+import application.Log;
 import message.Message;
 import message.MessagePasser;
 

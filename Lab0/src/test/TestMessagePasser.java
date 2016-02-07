@@ -1,4 +1,4 @@
-package driver;
+package test;
 
 import java.util.*;
 import java.util.zip.Inflater;
@@ -7,7 +7,7 @@ import message.Message;
 import message.MessagePasser;
 import socket.Listener;
 
-public class Driver {
+public class TestMessagePasser {
 
 	public static void main(String[] args) throws InterruptedException {
 		// Read arguments

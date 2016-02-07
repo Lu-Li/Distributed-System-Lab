@@ -1,4 +1,4 @@
-package driver;
+package application;
 
 public class Log {
 	private static void print(String type, String msg, int color) {

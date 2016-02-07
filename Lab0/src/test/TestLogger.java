@@ -1,14 +1,15 @@
-package driver;
+package test;
 
 import java.util.*;
 
+import application.Logger;
 import clock.ClockService;
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
 import message.Message;
 import message.MessagePasser;
 
-public class TestDriver {
+public class TestLogger {
 
 	public static void main(String[] args) throws InterruptedException {
 		// Read arguments
