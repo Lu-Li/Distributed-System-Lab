@@ -64,8 +64,10 @@ public class Driver {
 
 				default:
 					MessagePasser.terminateAll();
+					scanner.close();
 					return;
-				}				
+				}
+				scanner.close();
 			} catch (InputMismatchException e) {
 				System.out.println("INPUT MISMATCH!");
 			}
