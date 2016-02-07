@@ -2,6 +2,7 @@ package application;
 
 import java.util.*;
 
+import message.DistributedApplication;
 import message.Message;
 
 /*
@@ -12,7 +13,7 @@ import message.Message;
  * the comparisons done by the Logger should be via the comparison methods of the Timestamps
  *  so here, msglog use the comparator of timestamp
  */
-public class Logger {
+public class Logger implements DistributedApplication{
 	// TODO: config file design?
 	private String clockType;
 	// TODO: change type from Message to logEntry
@@ -26,12 +27,8 @@ public class Logger {
 		
 	}
 	
-	// receive stamped message and save it to message queue
-	public void saveMsg(Message message) {
-		msglog.add(message);
-	}
 	// display message. 
-	// TODO: 1,add timestamp field. 2, indicate whether two messages are concurrent
+	// TODO: 1,sort before dump. 2, indicate whether two messages are concurrent
 	// Question: how to show the limit of this concurrent?
 	public void dumpMessage() {
 		for (int i = 0; i < msglog.size(); i++) {
@@ -39,5 +36,10 @@ public class Logger {
 			System.out.println("seq:" + m.getSeqNum() + "/t" 
 					+ "content:" + m.getData().toString() + "/t" + "timestamp need to add");
 		}
+	}
+
+	@Override
+	public void OnMessage(Message msg) {
+		msglog.add(msg);
 	}
 }
