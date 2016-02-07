@@ -4,7 +4,6 @@ import java.util.*;
 
 import javax.rmi.CORBA.Tie;
 
-import message.DistributedApplication;
 import message.Message;
 import message.TimestampedMessage;
 
@@ -47,5 +46,10 @@ public class Logger implements DistributedApplication{
 		else {
 			Log.error("Logger", "data type mismatch");
 		}
+	}
+
+	@Override
+	public String getAppName() {		
+		return "LoggerApp";
 	}
 }

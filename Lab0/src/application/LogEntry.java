@@ -1,5 +1,6 @@
 package application;
 
+import clock.ClockServiceFactory;
 import clock.TimeStamp;
 import message.Message;
 import message.TimestampedMessage;
@@ -7,27 +8,14 @@ import message.TimestampedMessage;
  * TODO: fix out a reasonable and beautiful content to log
  */
 public class LogEntry implements Comparable<LogEntry>{
-	private String src;
-	private String dest;
-	private String kind;
 	private String message;
 	private TimeStamp timestamp;
 	
+	public LogEntry(String message) {
+		this.message = message;
+		this.timestamp = ClockServiceFactory.getClockService().getTimeStamp();
+	}
 	
-	public String getSrc() {
-		return src;
-	}
-
-
-	public String getDest() {
-		return dest;
-	}
-
-
-	public String getKind() {
-		return kind;
-	}
-
 
 	public String getMessage() {
 		return message;
@@ -43,8 +31,5 @@ public class LogEntry implements Comparable<LogEntry>{
 	@Override
 	public int compareTo(LogEntry o) {		
 		return this.timestamp.compareTo(o.timestamp);
-	}
-
-	
-	
+	}	
 }
