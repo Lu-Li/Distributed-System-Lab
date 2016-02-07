@@ -55,7 +55,7 @@ public class TestLogger {
 					MessagePasser.send(message);
 				case 2:
 					System.out.println("Current log file is as follows!");
-					logger.dumpMessage();
+					logger.dumpLog();
 					break;
 				case 3:
 					// QUESION: where to choose clock type?

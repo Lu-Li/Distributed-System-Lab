@@ -3,7 +3,7 @@ package message;
 import application.Log;
 import clock.TimeStamp;
 
-public class TimestampedMessage extends Message {
+public class TimestampedMessage extends Message{
 	private static final long serialVersionUID = 1L;
 
 	protected TimeStamp timestamp;
@@ -41,4 +41,6 @@ public class TimestampedMessage extends Message {
 		this.timestamp = timeStamp;
 	}
 
+
+	
 }

@@ -2,8 +2,11 @@ package application;
 
 import java.util.*;
 
+import javax.rmi.CORBA.Tie;
+
 import message.DistributedApplication;
 import message.Message;
+import message.TimestampedMessage;
 
 /*
  * Logger is an additional member of the distributed system 
@@ -14,10 +17,8 @@ import message.Message;
  *  so here, msglog use the comparator of timestamp
  */
 public class Logger implements DistributedApplication{
-	// TODO: config file design?
-	private String clockType;
 	// TODO: change type from Message to logEntry
-	private static ArrayList<Message> msglog = new ArrayList<>();
+	private static ArrayList<LogEntry> msglog = new ArrayList<>();
 	
 	public Logger(String configFilename, String localName) {
 		this.parseConfigFile(configFilename);
@@ -28,18 +29,23 @@ public class Logger implements DistributedApplication{
 	}
 	
 	// display message. 
-	// TODO: 1,sort before dump. 2, indicate whether two messages are concurrent
-	// Question: how to show the limit of this concurrent?
-	public void dumpMessage() {
+	public void dumpLog() {
+		Collections.sort(msglog);
 		for (int i = 0; i < msglog.size(); i++) {
-			Message m = msglog.get(i);
-			System.out.println("seq:" + m.getSeqNum() + "/t" 
-					+ "content:" + m.getData().toString() + "/t" + "timestamp need to add");
+			if (i<msglog.size()-1 && msglog.get(i)!=msglog.get(i+1))
+				System.out.println("------------------");
+			LogEntry m = msglog.get(i);
+			System.out.println("content:" + m.getMessage() + "/ttimestamp:" + m.getTimestamp());
 		}
 	}
 
+	// parse payload
 	@Override
 	public void OnMessage(Message msg) {
-		msglog.add(msg);
+		if (msg.getData() instanceof LogEntry)
+			msglog.add((LogEntry)msg.getData());
+		else {
+			Log.error("Logger", "data type mismatch");
+		}
 	}
 }

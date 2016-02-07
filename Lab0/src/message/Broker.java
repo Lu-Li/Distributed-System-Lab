@@ -27,7 +27,7 @@ public class Broker implements Runnable{
 			DistributedApplication disapp = app.get(kind);
 			disapp.OnMessage(message);
 		} else {
-			Log.error("distributed application", "");
+			Log.error("Broker", "no kind in message");
 		}
 	}
 
@@ -35,14 +35,14 @@ public class Broker implements Runnable{
 		if (!app.containsKey(type)) {
 			app.put(type, application);
 		} else {
-			Log.error("register", "application already exists error");
+			Log.error("Broker", "application already exists error");
 		}
 	}
 	public void deregister (String type, DistributedApplication application) {
 		if (app.containsKey(type)) {
 			app.remove(type);
 		} else {
-			Log.error("deregister", "Application not registered before.");
+			Log.error("Broker", "Application not registered before.");
 		}
 	}
 
@@ -50,10 +50,8 @@ public class Broker implements Runnable{
 	public void run() {
 		while (true) {
 			Message m = null;
-			if ((m = MessagePasser.receive()) != null) {
-				String kind = m.getKind();
-				app.get(kind).OnMessage(m);
-			}
+			if ((m = MessagePasser.receive()) != null) 
+				handleMessage(m);
 		}	
 	}
 	
