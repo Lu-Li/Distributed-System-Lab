@@ -5,6 +5,7 @@ import java.util.*;
 import clock.ClockService;
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
+import message.Broker;
 import message.Message;
 import message.MessagePasser;
 
@@ -21,17 +22,19 @@ public class TestDriver {
 		// TODO : init clock service
 		//ClockService cs = ClockServiceFactory.setClockService(args[2]);
 		MessagePasser.init(args[0], args[1]);
+		Broker broker = new Broker();
+		(new Thread(broker)).start();
 		Logger logger = new Logger(args[0], args[1]);
-
+		broker.register("Logger", logger);
+		
 		// simple UI
 		boolean done = false;
 		while (!done) {
 			Thread.sleep(300);
 			System.out.println("=======================");
 			System.out.println("1. send a Message");
-			System.out.println("2. recieve a Message");
-			System.out.println("3. dump all messages");
-			System.out.println("4. show timestamp");
+			System.out.println("2. dump all messages");
+			System.out.println("3. show timestamp");
 			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
@@ -50,22 +53,11 @@ public class TestDriver {
 					message = new Message(dest, kind, payload);
 					MessagePasser.send(message);
 				case 2:
-					// TODO: can driver choose save which message to which logger or just the one init by this driver?
-					// QUESTION: logger is init in this testDriver?
-					// QUESTION: is the last message receive from MessagePasser?
-					message = MessagePasser.receive();
-					if (message == null){
-						System.out.println("No message to save!");
-						break;
-					}
-					logger.saveMsg(message);
-					System.out.print("save message from " + message.getSrc() + "successfully.");			
-					break;
-				case 3:
 					System.out.println("Current log file is as follows!");
 					logger.dumpMessage();
 					break;
-				case 4:
+				case 3:
+					// QUESION: where to choose clock type?
 					TimeStamp ts = ClockServiceFactory.getClockService().getTimeStamp();
 					System.out.println("Current timeStamp is" + ts);
 				default:
