@@ -1,7 +1,8 @@
-package driver;
+package application;
 
 import java.util.*;
 
+import message.DistributedApplication;
 import message.Message;
 
 /*

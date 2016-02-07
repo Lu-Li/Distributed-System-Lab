@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 
-import driver.Log;
+import application.Log;
 import message.Message;
 import message.MessagePasser;
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import driver.Log;
+import application.Log;
 import message.Configuration.*;
 import socket.Listener;
 import socket.Receiver;

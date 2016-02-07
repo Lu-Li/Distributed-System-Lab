@@ -2,8 +2,7 @@ package message;
 
 import java.util.HashMap;
 
-import driver.DistributedApplication;
-import driver.Log;
+import application.Log;
 
 /*
  * Singleton pattern

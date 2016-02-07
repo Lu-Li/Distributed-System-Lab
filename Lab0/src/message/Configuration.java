@@ -2,7 +2,7 @@ package message;
 
 import org.yaml.snakeyaml.Yaml;
 
-import driver.Log;
+import application.Log;
 
 import java.io.*;
 import java.util.*;

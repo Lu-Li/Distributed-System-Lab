@@ -1,6 +1,6 @@
 package clock;
 
-import driver.Log;
+import application.Log;
 import message.Message;
 import message.TimestampedMessage;
 

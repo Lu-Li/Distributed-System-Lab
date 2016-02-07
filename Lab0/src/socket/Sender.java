@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import driver.Log;
+import application.Log;
 import message.Message;
 import message.MessagePasser;
 

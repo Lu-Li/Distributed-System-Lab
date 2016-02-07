@@ -1,6 +1,4 @@
-package driver;
-
-import message.Message;
+package message;
 
 public interface DistributedApplication {
 	public void OnMessage (Message msg);

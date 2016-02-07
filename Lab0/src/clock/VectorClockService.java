@@ -2,7 +2,7 @@ package clock;
 
 import java.util.List;
 
-import driver.Log;
+import application.Log;
 import message.MessagePasser;
 import message.TimestampedMessage;
 

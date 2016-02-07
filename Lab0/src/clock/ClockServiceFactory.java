@@ -1,6 +1,6 @@
 package clock;
 
-import driver.Log;
+import application.Log;
 
 public class ClockServiceFactory {
 	private static ClockService currentClockService;
