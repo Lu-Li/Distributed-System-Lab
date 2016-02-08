@@ -3,7 +3,9 @@ package application;
 import java.io.Serializable;
 
 import clock.ClockServiceFactory;
+import clock.LogicalTimeStamp;
 import clock.TimeStamp;
+import clock.VectorTimeStamp;
 import message.Message;
 import message.TimestampedMessage;
 /*
@@ -14,8 +16,13 @@ public class LogEntry implements Comparable<LogEntry>, Serializable{
 	private TimeStamp timestamp;
 	
 	public LogEntry(String message) {
-		this.message = message;
-		this.timestamp = ClockServiceFactory.getClockService().getTimeStamp();
+		this.message = message;		
+		TimeStamp timestamp = ClockServiceFactory.getClockService().getTimeStamp();
+		if (timestamp instanceof LogicalTimeStamp)
+			this.timestamp = new LogicalTimeStamp((LogicalTimeStamp)timestamp);
+		if (timestamp instanceof VectorTimeStamp)
+			this.timestamp = new VectorTimeStamp((VectorTimeStamp)timestamp);
+		Log.error("LogEntry", "No clock type");
 	}
 	
 

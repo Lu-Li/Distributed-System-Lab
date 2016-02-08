@@ -14,6 +14,13 @@ public class VectorTimeStamp extends TimeStamp {
 		Log.error("TimeStamp", "default initializer not implemented");
 	}
 	
+	public VectorTimeStamp(VectorTimeStamp otherTimestamp) {
+		vector = new ArrayList<>();
+		for (int i=0;i<otherTimestamp.getSize();i++)
+			vector.add(otherTimestamp.getVectorItem(i));		
+	}
+	
+	
 	/**
 	 * initializer
 	 * @param size number of nodes in config file
@@ -47,6 +54,11 @@ public class VectorTimeStamp extends TimeStamp {
 	 */
 	public void setVectorItem(int position, int time) {
 		vector.set(position, time);
+	}
+	
+	
+	public int getSize() {
+		return this.vector.size();
 	}
 	
 	@Override

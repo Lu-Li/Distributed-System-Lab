@@ -9,6 +9,15 @@ public class LogicalTimeStamp extends TimeStamp{
 
 	private Integer logicalTime = 0;
 	
+	public LogicalTimeStamp() {
+		logicalTime = 0;
+	}
+	
+	public LogicalTimeStamp(LogicalTimeStamp otherTimestamp) {
+		logicalTime = otherTimestamp.getLogicalTime();
+	}
+	
+	
 	public Integer getLogicalTime() {
 		return this.logicalTime;
 	}

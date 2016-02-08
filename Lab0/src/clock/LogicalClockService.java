@@ -45,7 +45,9 @@ public class LogicalClockService extends ClockService{
 			LogicalTimeStamp cur = (LogicalTimeStamp) this.timestamp;
 			cur.setLogicalTime(cur.getLogicalTime()+1);
 			this.timestamp = cur;
-			TimestampedMessage timestampedMessage = new TimestampedMessage(message, this.timestamp);
+			
+			TimestampedMessage timestampedMessage = 
+					new TimestampedMessage(message, new LogicalTimeStamp(cur));
 			Log.info("LogicalClockService", "added timestamp to message:"+timestampedMessage.toString());
 			return timestampedMessage;
 		} else Log.error("LogicalClockService", "timestamp type error"); 
@@ -63,7 +65,7 @@ public class LogicalClockService extends ClockService{
 			int max = Math.max(msgt, cur.getLogicalTime()) + 1;
 			lts.setLogicalTime(max);
 			this.timestamp = lts;
-			timestampedMessage.setTimeStamp(this.timestamp);
+			timestampedMessage.setTimeStamp(new LogicalTimeStamp(lts));
 		} else Log.error("LogicalClockService", "timestamp type error");
 	}
 

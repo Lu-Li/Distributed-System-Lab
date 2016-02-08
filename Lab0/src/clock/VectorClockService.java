@@ -54,7 +54,8 @@ public class VectorClockService extends ClockService {
 
 			//set current time for clockservice
 			this.timestamp = vectorTimeStamp;
-			TimestampedMessage timestampedMessage = new TimestampedMessage(message,this.timestamp);
+			TimestampedMessage timestampedMessage = 
+					new TimestampedMessage(message,new VectorTimeStamp(vectorTimeStamp));
 			return timestampedMessage;
 		} else Log.error("VectorClockService", "timestamp type error");
 		return null;
