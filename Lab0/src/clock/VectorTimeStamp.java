@@ -6,6 +6,7 @@ import java.util.List;
 import application.Log;
 
 public class VectorTimeStamp extends TimeStamp {
+	private static final long serialVersionUID = 1L;
 	// the vector, a list of integer with the size equal to number of nodes
 	private List<Integer> vector; 
 	
@@ -19,6 +20,8 @@ public class VectorTimeStamp extends TimeStamp {
 	 */
 	public VectorTimeStamp(int size) {
 		vector = new ArrayList<>(size);
+		for (int i=0;i<size;i++)
+			vector.add(0);
 	}
 	
 	
