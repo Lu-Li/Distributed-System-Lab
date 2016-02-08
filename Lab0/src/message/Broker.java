@@ -52,7 +52,7 @@ public class Broker{
 			Log.info("Broker", kind + " -> " + disapp.getAppName());
 			disapp.OnMessage(message);
 		} else {
-			Log.error("Broker", "no kind in message");
+			Log.error("Broker", "no corresponding rule for message kind:"+kind);
 		}
 	}
 

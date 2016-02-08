@@ -59,7 +59,9 @@ public class Message implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("MESSAGE: ");
+		stringBuilder.append("MESSAGE #");
+		stringBuilder.append(seqNum);
+		stringBuilder.append(" :");
 		stringBuilder.append(src);
 		stringBuilder.append(" -> ");
 		stringBuilder.append(dest);

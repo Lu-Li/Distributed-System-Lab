@@ -30,3 +30,4 @@ receiveRules :
     dest : c
     seqNum: 4
 
+clockType : Vector

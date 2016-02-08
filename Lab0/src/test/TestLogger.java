@@ -38,7 +38,9 @@ public class TestLogger {
 			System.out.println("=======================");
 			System.out.println("1. send a log");
 			System.out.println("2. dump all logs");
-			System.out.println("3. show timestamp");
+			System.out.println("3. show current time");
+			System.out.println("4. send normal message");
+			System.out.println("5. issue a timestamp");
 			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
@@ -65,6 +67,22 @@ public class TestLogger {
 				case 3:
 					TimeStamp ts = ClockServiceFactory.getClockService().getTimeStamp();
 					System.out.println("Current timeStamp is" + ts);
+					break;
+				case 4:
+					System.out.print("destination(name):");
+					dest = scanner.next();
+					System.out.print("kind:");
+					kind = scanner.next();
+					System.out.print("content:");
+					payload = scanner.next();
+					message = new Message(dest, kind, payload);
+					MessagePasser.send(message);				
+					break;
+				case 5:
+					message = new Message(null,null,null);
+					message.set_source(args[1]);
+					message.set_seqNum(-1);
+					ClockServiceFactory.getClockService().addTimeStampToMessage(message);				
 					break;
 				default:
 					MessagePasser.terminateAll();

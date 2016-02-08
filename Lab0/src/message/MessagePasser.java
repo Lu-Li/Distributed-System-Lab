@@ -136,7 +136,7 @@ public class MessagePasser {
 		if (receiveQueue.isEmpty()){
 			return null;
 		} else {
-			Log.info("MsgPasser", "receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
+			Log.info("MsgPasser", "receive: receiveQueue／delayQueue = "+receiveQueue.size()+"/"+delayReceiveQueue.size());
 			// get a message from the messageQueue
 			Message message = receiveQueue.poll();
 			if (message instanceof TimestampedMessage){
@@ -144,7 +144,8 @@ public class MessagePasser {
 					.getClockService()
 					.ReceivedTimestampedMessage((TimestampedMessage)message);
 			}
-			return receiveQueue.poll();
+			Log.info("MsgPasser", "receive:" + message);
+			return message;
 		}
 	}
 
