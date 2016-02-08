@@ -139,12 +139,12 @@ public class MessagePasser {
 			Log.info("MsgPasser", "receive: receiveQueue／delayQueue = "+receiveQueue.size()+"/"+delayReceiveQueue.size());
 			// get a message from the messageQueue
 			Message message = receiveQueue.poll();
+			Log.info("MsgPasser", "receive:" + message);
 			if (message instanceof TimestampedMessage){
 				ClockServiceFactory
 					.getClockService()
 					.ReceivedTimestampedMessage((TimestampedMessage)message);
 			}
-			Log.info("MsgPasser", "receive:" + message);
 			return message;
 		}
 	}

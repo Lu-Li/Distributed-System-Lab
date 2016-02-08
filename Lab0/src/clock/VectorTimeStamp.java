@@ -67,7 +67,7 @@ public class VectorTimeStamp extends TimeStamp {
 			for (int i = 0; i<vector.size(); i++){
 				if (vector.get(i).intValue() < otherVector.get(i).intValue())
 					smaller = true;
-				if (vector.get(i).intValue() < otherVector.get(i).intValue())
+				if (vector.get(i).intValue() > otherVector.get(i).intValue())
 					larger = true;
 			}
 			if (smaller && !larger)

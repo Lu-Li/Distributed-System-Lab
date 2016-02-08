@@ -8,6 +8,7 @@ import message.MessagePasser;
 import message.TimestampedMessage;
 
 public class VectorClockService extends ClockService {
+	private static int size;
 
 	/**
 	 * initializer
@@ -15,6 +16,7 @@ public class VectorClockService extends ClockService {
 	 */
 	public VectorClockService(int size) {
 		this.timestamp = new VectorTimeStamp(size);
+		this.size = size;
 	};
 
 	public VectorClockService(TimeStamp ts) {
@@ -65,16 +67,22 @@ public class VectorClockService extends ClockService {
 		if (timestampedMessage.getDest().equals(MessagePasser.getLocalName())){
 			TimeStamp timeStamp = timestampedMessage.getTimeStamp();
 			if (timeStamp instanceof VectorTimeStamp){
-				VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)timeStamp;
-				int myIndex = names.indexOf(timestampedMessage.getDest());
-				int senderIndex = names.indexOf(timestampedMessage.getSrc());
+				VectorTimeStamp receivedTimestamp = (VectorTimeStamp)timeStamp;				
+				VectorTimeStamp myTimestamp = (VectorTimeStamp)this.timestamp;
 				
-				int myTime = vectorTimeStamp.getVectorItem(myIndex) + 1;
-				int senderTime = vectorTimeStamp.getVectorItem(senderIndex) + 1;
-				vectorTimeStamp.setVectorItem(myIndex, myTime>senderTime?myTime:senderTime);
+				VectorTimeStamp resultTimetamp = new VectorTimeStamp(this.size);
 				
+				for (int index=0; index<size; index++){
+					int myTime = myTimestamp.getVectorItem(index);
+					int senderTime = receivedTimestamp.getVectorItem(index);
+					resultTimetamp.setVectorItem(index, myTime>senderTime?myTime:senderTime);
+				}
+				int index = names.indexOf(timestampedMessage.getDest());
+				resultTimetamp.incrementVectorItem(index);
+				
+				Log.info("VectorClockService", "ReceivedTimestampedMessage:"+timeStamp+"+"+myTimestamp+"->"+resultTimetamp);
 				//set current time for clockservice
-				this.timestamp = vectorTimeStamp;
+				this.timestamp = resultTimetamp;
 			} else Log.error("VectorClockService", "timestamp type error");
 		}
 	}

@@ -34,4 +34,9 @@ public class LogEntry implements Comparable<LogEntry>, Serializable{
 	public int compareTo(LogEntry o) {		
 		return this.timestamp.compareTo(o.timestamp);
 	}	
+	
+	@Override
+	public String toString() {
+		return "Log["+message+","+timestamp+"]";
+	}
 }

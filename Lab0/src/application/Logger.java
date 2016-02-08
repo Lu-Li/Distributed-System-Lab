@@ -31,10 +31,10 @@ public class Logger implements DistributedApplication{
 	public void dumpLog() {
 		Collections.sort(msglog);
 		for (int i = 0; i < msglog.size(); i++) {
-			if (i<msglog.size()-1 && msglog.get(i)!=msglog.get(i+1))
-				System.out.println("------------------");
 			LogEntry m = msglog.get(i);
 			System.out.println("content:" + m.getMessage() + "\ttimestamp:" + m.getTimestamp());
+			if (i<msglog.size()-1 && msglog.get(i).compareTo(msglog.get(i+1))!=0)
+				System.out.println("------------------");
 		}
 	}
 
