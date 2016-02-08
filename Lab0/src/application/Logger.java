@@ -34,7 +34,7 @@ public class Logger implements DistributedApplication{
 			if (i<msglog.size()-1 && msglog.get(i)!=msglog.get(i+1))
 				System.out.println("------------------");
 			LogEntry m = msglog.get(i);
-			System.out.println("content:" + m.getMessage() + "/ttimestamp:" + m.getTimestamp());
+			System.out.println("content:" + m.getMessage() + "\ttimestamp:" + m.getTimestamp());
 		}
 	}
 

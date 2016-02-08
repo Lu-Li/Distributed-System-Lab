@@ -21,8 +21,10 @@ public class Broker{
 			public void run() {
 				while (true) {
 					Message m = null;
-					if ((m = MessagePasser.receive()) != null) 
+					if ((m = MessagePasser.receive()) != null){
+						Log.info("Broker", m.toString());
 						handleMessage(m);
+					}
 					
 					try {
 						Thread.sleep(10);

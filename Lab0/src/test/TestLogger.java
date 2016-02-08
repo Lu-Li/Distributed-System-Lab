@@ -2,6 +2,7 @@ package test;
 
 import java.util.*;
 
+import application.Log;
 import application.LogEntry;
 import application.Logger;
 import clock.ClockService;
@@ -49,13 +50,14 @@ public class TestLogger {
 				case 1:
 					System.out.print("destination(name):");
 					String dest = scanner.next();
-					System.out.print("kind:");
-					String kind = scanner.next();
+					System.out.print("kind:Logger\n");
+					String kind = "Logger";//scanner.next();
 					System.out.print("logcontent:");
 					String payload = scanner.next();
 					LogEntry logEntry = new LogEntry(payload);
 					message = new Message(dest, kind, logEntry);
 					MessagePasser.send(message);
+					break;
 				case 2:
 					System.out.println("Current log file is as follows!");
 					logger.dumpLog();

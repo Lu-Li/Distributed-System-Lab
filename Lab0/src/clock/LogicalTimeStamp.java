@@ -29,6 +29,6 @@ public class LogicalTimeStamp extends TimeStamp{
 
 	@Override
 	public String toString() {		
-		return "LogicalTimeStamp:"+logicalTime;
+		return "LTS:"+logicalTime;
 	}
 }

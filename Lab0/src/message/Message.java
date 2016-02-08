@@ -55,4 +55,18 @@ public class Message implements Serializable {
 	public boolean isValid(){
 		return (src!=null && seqNum!=null);
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("MESSAGE: ");
+		stringBuilder.append(src);
+		stringBuilder.append(" -> ");
+		stringBuilder.append(dest);
+		stringBuilder.append(", kind = ");
+		stringBuilder.append(kind);		
+		stringBuilder.append(", data = ");
+		stringBuilder.append(data);
+		return stringBuilder.toString();
+	}
 }

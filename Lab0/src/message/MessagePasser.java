@@ -137,7 +137,13 @@ public class MessagePasser {
 			return null;
 		} else {
 			Log.info("MsgPasser", "receive: "+receiveQueue.size()+"/"+delayReceiveQueue.size());
-			// get a message from the messageQueue			
+			// get a message from the messageQueue
+			Message message = receiveQueue.poll();
+			if (message instanceof TimestampedMessage){
+				ClockServiceFactory
+					.getClockService()
+					.ReceivedTimestampedMessage((TimestampedMessage)message);
+			}
 			return receiveQueue.poll();
 		}
 	}
@@ -177,8 +183,10 @@ public class MessagePasser {
 	}
 	
 	public static void sendMessageBySocket(Message message){
-//		ClockServiceFactory.getClockService().updateTimeStamp(message);
-		Sender.addMsg(message);
+		TimestampedMessage timestampedMessage = 
+				ClockServiceFactory.getClockService().addTimeStampToMessage(message);
+		Log.info("MsgPasser", "sendMessageBySocket: "+timestampedMessage);
+		Sender.addMsg(timestampedMessage);
 	}
 	
 	public static void terminateAll() {
