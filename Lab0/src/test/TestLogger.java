@@ -63,6 +63,21 @@ public class TestLogger {
 				case 2:
 					System.out.println("Current log file is as follows!");
 					logger.dumpLog();
+
+					try {
+						while (true){
+							System.out.println("Compare?");
+			
+							int s1 = scanner.nextInt();
+							int s2 = scanner.nextInt();
+							LogEntry m1 = Logger.msglog.get(s1);
+							LogEntry m2 = Logger.msglog.get(s2);
+							System.out.println("Result:"+m1.compareTo(m2));
+						}
+										
+					} catch (InputMismatchException e) {
+						System.out.println("Done");
+					}
 					break;
 				case 3:
 					TimeStamp ts = ClockServiceFactory.getClockService().getTimeStamp();

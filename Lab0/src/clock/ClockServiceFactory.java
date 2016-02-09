@@ -6,6 +6,10 @@ public class ClockServiceFactory {
 	private static ClockService currentClockService;
 	private static String currentClockType = null;
 
+	public String getClockType() {
+		return currentClockType;
+	}
+	
 	public static ClockService setClockService(String clockType, TimeStamp ts) {
 		if (clockType == null) {
 			return null;

@@ -92,7 +92,7 @@ public class VectorTimeStamp extends TimeStamp {
 	
 	@Override
 	public String toString() {		
-		return "VectorTimeStamp:"+vector.toString();
+		return "VTs:"+vector.toString();
 	}
 
 }

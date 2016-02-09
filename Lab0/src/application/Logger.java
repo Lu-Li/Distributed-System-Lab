@@ -4,7 +4,10 @@ import java.util.*;
 
 import javax.rmi.CORBA.Tie;
 
+import clock.ClockServiceFactory;
+import clock.TimeStamp;
 import message.Message;
+import message.MessagePasser;
 import message.TimestampedMessage;
 
 /*
@@ -16,8 +19,7 @@ import message.TimestampedMessage;
  *  so here, msglog use the comparator of timestamp
  */
 public class Logger implements DistributedApplication{
-	// TODO: change type from Message to logEntry
-	private static ArrayList<LogEntry> msglog = new ArrayList<>();
+	public static ArrayList<LogEntry> msglog = new ArrayList<>();
 	
 	public Logger(String configFilename, String localName) {
 		this.parseConfigFile(configFilename);
@@ -29,12 +31,41 @@ public class Logger implements DistributedApplication{
 	
 	// display message. 
 	public void dumpLog() {
-		Collections.sort(msglog);
-		for (int i = 0; i < msglog.size(); i++) {
-			LogEntry m = msglog.get(i);
-			System.out.println("content:" + m.getMessage() + "\ttimestamp:" + m.getTimestamp());
-			if (i<msglog.size()-1 && msglog.get(i).compareTo(msglog.get(i+1))!=0)
-				System.out.println("------------------");
+		if (ClockServiceFactory.getClockService().equals("Logical")){
+			Collections.sort(msglog);
+			for (int i = 0; i < msglog.size(); i++) {
+				LogEntry m = msglog.get(i);
+				System.out.println("content:" + m.getMessage() + "\ttimestamp:" + m.getTimestamp());
+				if (i<msglog.size()-1 && msglog.get(i).compareTo(msglog.get(i+1))!=0)
+					System.out.println("------------------");
+			}
+		} else {
+//			ArrayList<LogEntry> tmpLog = new ArrayList<>();
+//			int conn[][] = new int[msglog.size()][msglog.size()];
+//			for (int i = 0; i < msglog.size(); i++) 
+//				for (int j = 0; j < msglog.size(); j++) {
+//					if (i==j)
+//						continue;
+//					LogEntry mi = msglog.get(i);
+//					LogEntry mj = msglog.get(j);
+//					if (mi.compareTo(mj)==-1)
+//						conn[i][j]=1;
+//				}
+//			for (int i = 0; i < msglog.size(); i++)
+//				
+			Collections.sort(msglog);
+			for (int i = 0; i < msglog.size(); i++) {
+				LogEntry m = msglog.get(i);
+				System.out.print("#"+i+" :" + m.getMessage() + "\tts:" + m.getTimestamp());
+				for (int j = 0; j < msglog.size(); j++) {
+					if (j==i)
+						continue;
+					LogEntry m2 = msglog.get(j);
+					if (m.getTimestamp().compareTo(m2.getTimestamp())==0)
+						System.out.print(" = " + m2.getTimestamp());
+				}
+				System.out.println();
+			}
 		}
 	}
 
