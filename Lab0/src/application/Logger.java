@@ -40,19 +40,6 @@ public class Logger implements DistributedApplication{
 					System.out.println("------------------");
 			}
 		} else {
-//			ArrayList<LogEntry> tmpLog = new ArrayList<>();
-//			int conn[][] = new int[msglog.size()][msglog.size()];
-//			for (int i = 0; i < msglog.size(); i++) 
-//				for (int j = 0; j < msglog.size(); j++) {
-//					if (i==j)
-//						continue;
-//					LogEntry mi = msglog.get(i);
-//					LogEntry mj = msglog.get(j);
-//					if (mi.compareTo(mj)==-1)
-//						conn[i][j]=1;
-//				}
-//			for (int i = 0; i < msglog.size(); i++)
-//				
 			Collections.sort(msglog);
 			for (int i = 0; i < msglog.size(); i++) {
 				LogEntry m = msglog.get(i);

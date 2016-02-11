@@ -107,6 +107,10 @@ public class MessagePasser {
 		message.set_seqNum(seq);
 		message.set_source(src);
 		
+		TimestampedMessage timestampedMessage = 
+				ClockServiceFactory.getClockService().addTimeStampToMessage(message);
+		message = timestampedMessage;
+		
 		// find corresponding action
 		Action action = config.getAction(message, Direction.Send);
 		switch (action) {
@@ -184,10 +188,8 @@ public class MessagePasser {
 	}
 	
 	public static void sendMessageBySocket(Message message){
-		TimestampedMessage timestampedMessage = 
-				ClockServiceFactory.getClockService().addTimeStampToMessage(message);
-		Log.info("MsgPasser", "sendMessageBySocket: "+timestampedMessage);
-		Sender.addMsg(timestampedMessage);
+		Log.info("MsgPasser", "sendMessageBySocket: "+message);
+		Sender.addMsg(message);
 	}
 	
 	public static void terminateAll() {
