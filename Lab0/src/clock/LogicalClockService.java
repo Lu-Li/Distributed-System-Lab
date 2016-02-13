@@ -24,20 +24,6 @@ public class LogicalClockService extends ClockService{
 		return this.timestamp;
 	}
 
-	@Override
-	public TimeStamp updateTimeStamp(TimestampedMessage message) {
-		TimeStamp timeStamp = message.getTimeStamp();
-		if (timeStamp instanceof LogicalTimeStamp && this.timestamp instanceof LogicalTimeStamp) {
-			LogicalTimeStamp lts = (LogicalTimeStamp) timeStamp;
-			LogicalTimeStamp cur = (LogicalTimeStamp) this.timestamp;
-			int msgt = lts.getLogicalTime();
-			int max = Math.max(msgt, cur.getLogicalTime()) + 1;
-			lts.setLogicalTime(max);
-			this.timestamp = lts;
-			message.setTimeStamp(this.timestamp);
-		}
-		return this.timestamp;
-	}
 
 	@Override
 	public TimestampedMessage addTimeStampToMessage(Message message) {

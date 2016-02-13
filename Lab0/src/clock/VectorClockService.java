@@ -36,12 +36,6 @@ public class VectorClockService extends ClockService {
 	 * @param message a message that is just received/sent
 	 * @return current time after the update
 	 */
-	@Override
-	public TimeStamp updateTimeStamp(TimestampedMessage message) {
-		//set timestamp for message, not sure if is required
-		message.setTimeStamp(this.timestamp);
-		return this.timestamp;
-	}
 
 	@Override
 	public TimestampedMessage addTimeStampToMessage(Message message) {
