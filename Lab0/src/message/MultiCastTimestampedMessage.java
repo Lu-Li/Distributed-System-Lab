@@ -23,6 +23,7 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 			this.originSrc = this.src;
 			this.originTimestamp = this.timestamp;
 		}
+		this.dest = dest;
 		this.groupName = groupName;
 		this.kind = kind;
 	}

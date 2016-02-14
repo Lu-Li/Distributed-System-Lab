@@ -73,7 +73,7 @@ public class MultiCaster implements DistributedApplication {
 
 	
 	public void B_MultiCast(String groupName, Message message) {
-		Log.info("MultiCaster", "B_MC :"+message+"->"+groupName);
+		Log.info("MultiCaster", "B_MC ::"+message+"->"+groupName);
 		
 		List<String> members = getAllMembersByGroupName(groupName);
 		for (String name:members) {
