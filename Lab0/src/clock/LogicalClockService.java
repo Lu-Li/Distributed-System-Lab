@@ -26,16 +26,15 @@ public class LogicalClockService extends ClockService{
 
 
 	@Override
-	public TimestampedMessage addTimeStampToMessage(Message message) {
+	public TimestampedMessage addTimeStampToMessage(TimestampedMessage message) {
 		if (this.timestamp instanceof LogicalTimeStamp) {
 			LogicalTimeStamp cur = (LogicalTimeStamp) this.timestamp;
 			cur.setLogicalTime(cur.getLogicalTime()+1);
 			this.timestamp = cur;
 			
-			TimestampedMessage timestampedMessage = 
-					new TimestampedMessage(message, new LogicalTimeStamp(cur));
-			Log.info("LogicalClockService", "added timestamp to message:"+timestampedMessage.toString());
-			return timestampedMessage;
+			message.setTimeStamp( new LogicalTimeStamp(cur));
+			Log.info("LogicalClockService", "added timestamp to message:"+message.toString());
+			return message;
 		} else Log.error("LogicalClockService", "timestamp type error"); 
 			
 		return null;

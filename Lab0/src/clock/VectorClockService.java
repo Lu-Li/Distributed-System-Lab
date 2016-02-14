@@ -38,7 +38,7 @@ public class VectorClockService extends ClockService {
 	 */
 
 	@Override
-	public TimestampedMessage addTimeStampToMessage(Message message) {
+	public TimestampedMessage addTimeStampToMessage(TimestampedMessage message) {
 		List<String> names = MessagePasser.getAllNames();
 		TimeStamp timeStamp = this.timestamp;
 		if (timeStamp instanceof VectorTimeStamp){
@@ -48,9 +48,8 @@ public class VectorClockService extends ClockService {
 
 			//set current time for clockservice
 			this.timestamp = vectorTimeStamp;
-			TimestampedMessage timestampedMessage = 
-					new TimestampedMessage(message,new VectorTimeStamp(vectorTimeStamp));
-			return timestampedMessage;
+			message.setTimeStamp(new VectorTimeStamp(vectorTimeStamp));
+			return message;
 		} else Log.error("VectorClockService", "timestamp type error");
 		return null;
 	}

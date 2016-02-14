@@ -107,9 +107,11 @@ public class MessagePasser {
 		message.set_seqNum(seq);
 		message.set_source(src);
 		
-		TimestampedMessage timestampedMessage = 
-				ClockServiceFactory.getClockService().addTimeStampToMessage(message);
-		message = timestampedMessage;
+		if (message instanceof TimestampedMessage){
+			TimestampedMessage timestampedMessage = (TimestampedMessage)message; 
+			ClockServiceFactory.getClockService().addTimeStampToMessage(timestampedMessage);
+			message = timestampedMessage;
+		}
 		
 		// find corresponding action
 		Action action = config.getAction(message, Direction.Send);

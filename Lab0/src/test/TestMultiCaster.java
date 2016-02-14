@@ -1,6 +1,7 @@
 package test;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import application.LogEntry;
@@ -11,6 +12,7 @@ import clock.TimeStamp;
 import message.Broker;
 import message.Message;
 import message.MessagePasser;
+import message.MultiCastTimestampedMessage;
 
 public class TestMultiCaster {
 	public static void  main(String[] args) throws InterruptedException {
@@ -98,6 +100,12 @@ public class TestMultiCaster {
 				case 5:
 					ClockServiceFactory.getClockService().issueTimeStamp();				
 					break;
+				case 6:
+					System.out.print("destination group:");
+					String groupName = scanner.next();
+					System.out.print("content:");
+					payload = scanner.next();
+					multiCaster.R_MultiCast(groupName, payload);				
 				default:
 					MessagePasser.terminateAll();
 					return;
