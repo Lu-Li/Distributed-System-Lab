@@ -61,6 +61,24 @@ public class VectorTimeStamp extends TimeStamp {
 		return this.vector.size();
 	}
 	
+	// identical, not only parallel
+	public boolean isIdenticalTo(TimeStamp o) {
+		if (o instanceof VectorTimeStamp){
+			//get vector of the other timestamp
+			VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)o;			
+			List<Integer> otherVector = vectorTimeStamp.vector;
+			if (vector.size()!=otherVector.size())
+				return false;
+			for (int i = 0; i<vector.size(); i++)
+				if (vector.get(i).intValue() != otherVector.get(i).intValue())
+					return false;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 	@Override
 	public int compareTo(TimeStamp o) {
 		if (o instanceof VectorTimeStamp){
