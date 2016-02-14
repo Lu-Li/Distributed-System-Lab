@@ -8,7 +8,7 @@ import message.MessagePasser;
 import message.TimestampedMessage;
 
 public class VectorClockService extends ClockService {
-	private static int size;
+	private int size;
 
 	/**
 	 * initializer
