@@ -31,3 +31,15 @@ receiveRules :
     seqNum: 4
 
 clockType : Vector
+
+groups :
+  - name : Group1
+    members :
+      - a
+      - b
+      - c
+  - name : Group2
+    members :
+      - d
+      - b
+      - c
