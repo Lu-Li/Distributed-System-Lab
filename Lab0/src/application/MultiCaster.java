@@ -14,17 +14,23 @@ import org.yaml.snakeyaml.Yaml;
 import message.Message;
 
 public class MultiCaster implements DistributedApplication{
-	private final static String Message_B_MultiCast = "B_MultiCast";
+	//constants
+	private final static String Message_R_MultiCast = "R_MultiCast";
 	private final static String Message_CO_MultiCast = "CO_MultiCast";
+	
 	//groups
-	private List<List<String>> groups = new ArrayList<List<String>>();
+	private List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
+
+	//multicaster name
 	private String localName;
 
+	
 	public MultiCaster(String configFilename, String localName) {
 		this.parseConfigFile(configFilename);
 		this.localName = localName;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void parseConfigFile(String filename) {
 		InputStream input;
 		try {
@@ -32,11 +38,11 @@ public class MultiCaster implements DistributedApplication{
 			Yaml yaml = new Yaml();
 
 			Map config = (Map) yaml.load(input);
-			List<Map> groups = (List<Map>) config.get("groups");
+			List<Map> groupsMap = (List<Map>) config.get("groups");
+			for (Map map : groupsMap)
+				groups.add(new MultiCastGroup(map));
 
-			System.out.println();
 			Log.verbose("GROUPS", groups.toString());
-			System.out.println();
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found!");
 			e.printStackTrace();
