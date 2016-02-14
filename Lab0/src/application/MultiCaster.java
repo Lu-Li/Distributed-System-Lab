@@ -55,16 +55,17 @@ public class MultiCaster implements DistributedApplication{
 	}
 	
 	void B_Deliver(){
-		//if we are only using B_multicast: 
+		// if we are only using B_multicast: 
 		//	sysout....
 		
-		
+
 		// if m not reeceived ....
-		//   call R_deliver
+		//   do sth
+		//   call R_deliver()
 	}
 	
 	void R_MultiCast(){
-		//B_Multicast
+		//B_Multicast()
 	}
 	
 	void R_Deliver(){
@@ -83,7 +84,10 @@ public class MultiCaster implements DistributedApplication{
 	public void OnMessage(Message msg) {
 		// TODO Auto-generated method stub
 		// if type == Message_B_MultiCast
-		// B_Deliver
+		//   B_Deliver()
+		// if type == Message_R_MultiCast
+		//   R_Deliver()
+		
 	}
 
 	@Override
