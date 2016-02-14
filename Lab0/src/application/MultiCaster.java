@@ -13,7 +13,10 @@ import java.util.Set;
 
 import org.yaml.snakeyaml.Yaml;
 
+import clock.ClockServiceFactory;
+import clock.TimeStamp;
 import message.Message;
+import message.MessagePasser;
 import message.MultiCastTimestampedMessage;
 
 public class MultiCaster implements DistributedApplication{
@@ -36,7 +39,7 @@ public class MultiCaster implements DistributedApplication{
 		this.localName = localName;
 	}
 
-	public List<String> getAllMembers(String groupName) {
+	public List<String> getAllMembersByGroupName(String groupName) {
 		for (int i = 0; i < groups.size(); i++) {
 			if (groups.get(i).getName().equals(groupName)) {
 				return groups.get(i).getAllMembers();
@@ -64,10 +67,16 @@ public class MultiCaster implements DistributedApplication{
 		}
 	}
 
-	public void B_MultiCast(String groupName){
-		//send type Message_B_MultiCast message to all		
-		List<String> group = getAllMembers(groupName);
-	}
+//	public void B_MultiCast(String groupName, Object payload, TimeStamp originTimestamp, String originSrc){
+//		//send type Message_B_MultiCast message to all		
+//		List<String> members = getAllMembersByGroupName(groupName);
+//		for (int i = 0; i < members.size(); i++) {
+//			// dst, payload, orisrc, oritimestamp,
+//			// String dest, String kind
+//			MultiCastTimestampedMessage message = new MultiCastTimestampedMessage();
+//			MessagePasser.send(message);
+//		}
+//	}
 	
 	void B_Deliver(Message msg){
 		// if we are only using B_multicast: 
@@ -80,8 +89,11 @@ public class MultiCaster implements DistributedApplication{
 		
 	}
 	
-	public void R_MultiCast(){
+	// only original sender use r_multicast
+	public void R_MultiCast(String groupName, Object payload){
 		//B_Multicast() change type
+		TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
+//		B_MultiCast(groupName, payload, timeStamp, this.localName);	
 	}
 	
 	void R_Deliver(Message msg){

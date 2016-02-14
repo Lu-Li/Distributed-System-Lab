@@ -28,7 +28,7 @@ public abstract class ClockService {
 	 */
 	public abstract TimeStamp issueTimeStamp();
 
-	public abstract TimestampedMessage addTimeStampToMessage(Message message);
+	public abstract TimestampedMessage addTimeStampToMessage(TimestampedMessage message);
 	
 	public abstract void ReceivedTimestampedMessage(TimestampedMessage timestampedMessage);
 }

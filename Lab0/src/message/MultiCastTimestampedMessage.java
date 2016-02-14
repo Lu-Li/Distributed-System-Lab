@@ -12,7 +12,7 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 	 * @param kind : kind of message that would be feed into Broker
 	 * @param data : payload, determined by kind
 	 */
-	public MultiCastTimestampedMessage(String dest, String kind, Object data) {
+	public MultiCastTimestampedMessage(String dest, String kind, Object data) {		
 		super(dest, kind, data);
 	}
 
@@ -20,8 +20,10 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		super(message, timeStamp);
 	}
 	
-	public MultiCastTimestampedMessage(Message message, TimeStamp timeStamp, TimeStamp ,String oriSrc) {
-		super(message, timeStamp);
-		this.originSrc = oriSrc;
-	}
+//	public MultiCastTimestampedMessage(String dest, String kind, Object data, TimeStamp timeStamp, String oriSrc) {
+//		super(message, timeStamp);
+//		this.originSrc = oriSrc;
+//	}
+//	
+	// TODO: equals && hashcode
 }

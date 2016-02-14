@@ -103,8 +103,9 @@ public class TestMultiCaster {
 				case 6:
 					System.out.print("destination group:");
 					String groupName = scanner.next();
-					MultiCastTimestampedMessage msg = new MultiCastTimestampedMessage();
-					multiCaster.R_MultiCast(groupName, msg);				
+					System.out.print("content:");
+					payload = scanner.next();
+					multiCaster.R_MultiCast(groupName, payload);				
 				default:
 					MessagePasser.terminateAll();
 					return;

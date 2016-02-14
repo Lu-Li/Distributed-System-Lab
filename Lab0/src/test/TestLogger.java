@@ -11,6 +11,7 @@ import clock.TimeStamp;
 import message.Broker;
 import message.Message;
 import message.MessagePasser;
+import message.TimestampedMessage;
 
 public class TestLogger {
 
@@ -57,7 +58,7 @@ public class TestLogger {
 					System.out.print("logcontent:");
 					String payload = scanner.next();
 					LogEntry logEntry = new LogEntry(payload);
-					message = new Message(dest, kind, logEntry);
+					message = new TimestampedMessage(dest, kind, logEntry);
 					MessagePasser.send(message);
 					break;
 				case 2:
@@ -90,7 +91,7 @@ public class TestLogger {
 					kind = scanner.next();
 					System.out.print("content:");
 					payload = scanner.next();
-					message = new Message(dest, kind, payload);
+					message = new TimestampedMessage(dest, kind, payload);
 					MessagePasser.send(message);				
 					break;
 				case 5:
