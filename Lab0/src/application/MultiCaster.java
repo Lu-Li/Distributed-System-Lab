@@ -15,6 +15,7 @@ import message.Message;
 
 public class MultiCaster implements DistributedApplication{
 	//constants
+	private final static String Message_B_MultiCast = "B_MultiCast";
 	private final static String Message_R_MultiCast = "R_MultiCast";
 	private final static String Message_CO_MultiCast = "CO_MultiCast";
 	
@@ -50,19 +51,24 @@ public class MultiCaster implements DistributedApplication{
 	}
 
 	void B_MultiCast(){
-		
+		//send type Message_B_MultiCast message to all		
 	}
 	
 	void B_Deliver(){
+		//if we are only using B_multicast: 
+		//	sysout....
 		
+		
+		// if m not reeceived ....
+		//   call R_deliver
 	}
 	
 	void R_MultiCast(){
-		
+		//B_Multicast
 	}
 	
 	void R_Deliver(){
-		
+		//sysout "get reliable m message:...."
 	}
 
 	void CO_MultiCast(){
@@ -76,7 +82,8 @@ public class MultiCaster implements DistributedApplication{
 	@Override
 	public void OnMessage(Message msg) {
 		// TODO Auto-generated method stub
-		
+		// if type == Message_B_MultiCast
+		// B_Deliver
 	}
 
 	@Override
