@@ -40,4 +40,16 @@ public class LogicalTimeStamp extends TimeStamp{
 	public String toString() {		
 		return "LTS:"+logicalTime;
 	}
+
+	@Override
+	public boolean isIdenticalTo(TimeStamp o) {
+		if (o instanceof LogicalTimeStamp){
+			LogicalTimeStamp logicalTimeStamp = (LogicalTimeStamp)o;			
+			Integer otherTime = logicalTimeStamp.logicalTime;
+			
+			return logicalTime.intValue() == otherTime.intValue();
+		} else {
+			return false;
+		}
+	}
 }
