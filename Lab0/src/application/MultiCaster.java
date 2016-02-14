@@ -14,6 +14,7 @@ import java.util.Set;
 import org.yaml.snakeyaml.Yaml;
 
 import message.Message;
+import message.MultiCastTimestampedMessage;
 
 public class MultiCaster implements DistributedApplication{
 	//constants

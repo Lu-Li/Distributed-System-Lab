@@ -12,6 +12,7 @@ import clock.TimeStamp;
 import message.Broker;
 import message.Message;
 import message.MessagePasser;
+import message.MultiCastTimestampedMessage;
 
 public class TestMultiCaster {
 	public static void  main(String[] args) throws InterruptedException {
