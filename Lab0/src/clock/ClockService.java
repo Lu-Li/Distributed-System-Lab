@@ -26,6 +26,8 @@ public abstract class ClockService {
 	 * @param message a message that is just received/sent
 	 * @return a TimeStamp instance representing current time after the update
 	 */
+	public abstract TimeStamp issueTimeStamp();
+
 	public abstract TimestampedMessage addTimeStampToMessage(Message message);
 	
 	public abstract void ReceivedTimestampedMessage(TimestampedMessage timestampedMessage);

@@ -55,4 +55,17 @@ public class LogicalClockService extends ClockService{
 		} else Log.error("LogicalClockService", "timestamp type error");
 	}
 
+	@Override
+	public TimeStamp issueTimeStamp() {
+		if (this.timestamp instanceof LogicalTimeStamp) {
+			LogicalTimeStamp cur = (LogicalTimeStamp) this.timestamp;
+			cur.setLogicalTime(cur.getLogicalTime()+1);
+			this.timestamp = cur;
+			
+			Log.info("LogicalClockService", "issue timestamp:"+timestamp.toString());
+		} else Log.error("LogicalClockService", "timestamp type error"); 
+
+		return timestamp;
+	}
+
 }

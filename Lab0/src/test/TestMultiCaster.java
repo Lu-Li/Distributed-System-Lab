@@ -96,10 +96,7 @@ public class TestMultiCaster {
 					MessagePasser.send(message);				
 					break;
 				case 5:
-					message = new Message(null,null,null);
-					message.set_source(args[1]);
-					message.set_seqNum(-1);
-					ClockServiceFactory.getClockService().addTimeStampToMessage(message);				
+					ClockServiceFactory.getClockService().issueTimeStamp();				
 					break;
 				default:
 					MessagePasser.terminateAll();

@@ -82,4 +82,20 @@ public class VectorClockService extends ClockService {
 		}
 	}
 
+	@Override
+	public TimeStamp issueTimeStamp() {
+		List<String> names = MessagePasser.getAllNames();
+		TimeStamp timeStamp = this.timestamp;
+		if (timeStamp instanceof VectorTimeStamp){
+			VectorTimeStamp vectorTimeStamp = (VectorTimeStamp)timeStamp;
+			int index = names.indexOf(MessagePasser.getLocalName());
+			vectorTimeStamp.incrementVectorItem(index);
+
+			//set current time for clockservice
+			this.timestamp = vectorTimeStamp;
+			Log.info("VectorClockService", "issue timestamp:"+timestamp.toString());
+		} else Log.error("VectorClockService", "timestamp type error");
+		return this.timestamp;
+	}
+
 }
