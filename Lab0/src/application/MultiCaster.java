@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -21,6 +23,8 @@ public class MultiCaster implements DistributedApplication{
 	
 	//groups
 	private List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
+	// TODO: 
+	private Set<MultiCastTimestampedMessage> receivedMsg = new HashSet<>();
 
 	//multicaster name
 	private String localName;
@@ -29,6 +33,15 @@ public class MultiCaster implements DistributedApplication{
 	public MultiCaster(String configFilename, String localName) {
 		this.parseConfigFile(configFilename);
 		this.localName = localName;
+	}
+
+	public List<String> getAllMembers(String groupName) {
+		for (int i = 0; i < groups.size(); i++) {
+			if (groups.get(i).getName().equals(groupName)) {
+				return groups.get(i).getAllMembers();
+			}
+		}
+		return null;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -50,11 +63,12 @@ public class MultiCaster implements DistributedApplication{
 		}
 	}
 
-	void B_MultiCast(){
+	public void B_MultiCast(String groupName){
 		//send type Message_B_MultiCast message to all		
+		List<String> group = getAllMembers(groupName);
 	}
 	
-	void B_Deliver(){
+	void B_Deliver(Message msg){
 		// if we are only using B_multicast: 
 		//	sysout....
 		
@@ -62,13 +76,14 @@ public class MultiCaster implements DistributedApplication{
 		// if m not reeceived ....
 		//   do sth
 		//   call R_deliver()
+		
 	}
 	
-	void R_MultiCast(){
-		//B_Multicast()
+	public void R_MultiCast(){
+		//B_Multicast() change type
 	}
 	
-	void R_Deliver(){
+	void R_Deliver(Message msg){
 		//sysout "get reliable m message:...."
 	}
 
@@ -87,7 +102,11 @@ public class MultiCaster implements DistributedApplication{
 		//   B_Deliver()
 		// if type == Message_R_MultiCast
 		//   R_Deliver()
-		
+		if (msg.getKind().equals(Message_B_MultiCast)) {
+			B_Deliver(msg);
+		} else if (msg.getKind().equals(Message_R_MultiCast)) {
+			R_Deliver(msg);
+		}	
 	}
 
 	@Override

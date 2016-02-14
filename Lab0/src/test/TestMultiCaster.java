@@ -1,6 +1,7 @@
 package test;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import application.LogEntry;
@@ -101,6 +102,11 @@ public class TestMultiCaster {
 					message.set_seqNum(-1);
 					ClockServiceFactory.getClockService().addTimeStampToMessage(message);				
 					break;
+				case 6:
+					System.out.print("destination group:");
+					String groupName = scanner.next();
+					MultiCastTimestampedMessage msg = new MultiCastTimestampedMessage();
+					multiCaster.R_MultiCast(groupName, msg);				
 				default:
 					MessagePasser.terminateAll();
 					return;
