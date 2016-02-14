@@ -1,6 +1,7 @@
 package message;
 
 import application.Log;
+import clock.ClockServiceFactory;
 import clock.TimeStamp;
 
 public class TimestampedMessage extends Message{
@@ -14,8 +15,10 @@ public class TimestampedMessage extends Message{
 	 * @param kind : kind of message that would be feed into Broker
 	 * @param data : payload, determined by kind
 	 */
+	
 	public TimestampedMessage(String dest, String kind, Object data) {
 		super(dest, kind, data);
+		this.timestamp = ClockServiceFactory.getClockService().getTimeStamp();
 	}
 	
 	/**
@@ -32,6 +35,17 @@ public class TimestampedMessage extends Message{
 		set_source(message.getSrc());
 		this.timestamp = timeStamp;
 	}
+	
+	public TimestampedMessage(Message message) {
+		super(message);
+		if (message instanceof TimestampedMessage)
+			this.timestamp = ((TimestampedMessage) message).timestamp;
+		else
+			this.timestamp = ClockServiceFactory.getClockService().getTimeStamp();
+	}
+	
+	
+	
 	
 	public TimeStamp getTimeStamp() {
 		if (this.timestamp==null)

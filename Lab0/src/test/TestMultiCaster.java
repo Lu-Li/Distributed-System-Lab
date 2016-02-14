@@ -30,10 +30,9 @@ public class TestMultiCaster {
 		ClockServiceFactory.setClockService("Vector",4);
 		MessagePasser.init(args[0], args[1]);
 		Broker broker = new Broker();
-		Logger logger = new Logger(args[0], args[1]);
-		MultiCaster multiCaster = new MultiCaster(args[0], args[1]);
+		Logger logger = new Logger(args[0], args[1],broker);
+		MultiCaster multiCaster = new MultiCaster(args[0], args[1],broker);
 		
-		broker.register("Logger", logger);
 		
 		// simple UI
 		boolean done = false;
@@ -45,7 +44,8 @@ public class TestMultiCaster {
 			System.out.println("3. show current time");
 			System.out.println("4. send normal message");
 			System.out.println("5. issue a timestamp");
-			System.out.println("6. multicast a message");
+			System.out.println("6. B_multicast a message");
+			System.out.println("7. R_multicast a message");
 			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
@@ -106,7 +106,15 @@ public class TestMultiCaster {
 					String groupName = scanner.next();
 					System.out.print("content:");
 					payload = scanner.next();
-					multiCaster.R_MultiCast(groupName, payload);				
+					message = new Message("", "", payload);					
+					multiCaster.B_MultiCast(groupName, message);				
+				case 7:
+					System.out.print("destination group:");
+					groupName = scanner.next();
+					System.out.print("content:");
+					payload = scanner.next();
+					message = new Message("", "", payload);
+					multiCaster.R_MultiCast(groupName, message);				
 				default:
 					MessagePasser.terminateAll();
 					return;

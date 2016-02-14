@@ -6,6 +6,7 @@ import javax.rmi.CORBA.Tie;
 
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
+import message.Broker;
 import message.Message;
 import message.MessagePasser;
 import message.TimestampedMessage;
@@ -21,8 +22,9 @@ import message.TimestampedMessage;
 public class Logger implements DistributedApplication{
 	public static ArrayList<LogEntry> msglog = new ArrayList<>();
 	
-	public Logger(String configFilename, String localName) {
+	public Logger(String configFilename, String localName, Broker broker) {
 		this.parseConfigFile(configFilename);
+		broker.register("Logger", this);		
 	}
 	
 	public void parseConfigFile(String filename) {

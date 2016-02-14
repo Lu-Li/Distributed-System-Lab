@@ -6,11 +6,11 @@ public class Message implements Serializable {
 	// serialization version 1. 
 	private static final long serialVersionUID = 1L;
 	
-	private String src;
-	private String dest;
-	private String kind;
-	private Integer seqNum;
-	private Object data;
+	protected String src;
+	protected String dest;
+	protected String kind;
+	protected Integer seqNum;
+	protected Object data;
 	
 	/**
 	 * Initializers
@@ -23,6 +23,13 @@ public class Message implements Serializable {
 		this.kind = kind;
 		this.data = data;
 	}
+	
+	public Message(Message message) {
+		this.dest = message.dest;
+		this.kind = message.kind;
+		this.data = message.data;
+	}
+	
 	
 	/**
 	 * Setters

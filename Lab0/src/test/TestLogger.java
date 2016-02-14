@@ -29,7 +29,7 @@ public class TestLogger {
 		ClockServiceFactory.setClockService(args[2],4);
 		MessagePasser.init(args[0], args[1]);
 		Broker broker = new Broker();
-		Logger logger = new Logger(args[0], args[1]);
+		Logger logger = new Logger(args[0], args[1], broker);
 		broker.register("Logger", logger);
 		
 		// simple UI
