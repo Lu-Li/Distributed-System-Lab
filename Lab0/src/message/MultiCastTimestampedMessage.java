@@ -50,6 +50,7 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		return originTimestamp;
 	}
 
+
 	public String getOriginSrc() {
 		return originSrc;
 	}
