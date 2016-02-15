@@ -29,6 +29,27 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		this.kind = kind;
 	}
 	
+	public String getGroupName() {
+		return groupName;
+	}
+
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+
+	public TimeStamp getOriginTimestamp() {
+		return originTimestamp;
+	}
+
+
+	public String getOriginSrc() {
+		return originSrc;
+	}
+
+
+
 	// TODO: equals && hashcode
 	@Override
 	public boolean equals(Object obj) {		
