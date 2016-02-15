@@ -65,18 +65,6 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 	public String toString() {
 		return super.toString() + ", group = "+ groupName + ", sender = "+originSrc;
 	}
-
-	public TimeStamp getOriginTimestamp() {
-		return originTimestamp;
-	}
-
-	public String getOriginSrc() {
-		return originSrc;
-	}
-
-	public String getGroupName() {
-		return groupName;
-	}
 }
 
 
