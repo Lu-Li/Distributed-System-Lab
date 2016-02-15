@@ -143,11 +143,21 @@ public class MultiCaster implements DistributedApplication {
 		
 		// Using R_Multicast, call further methods
 		if (msg.getKind().equals(Message_R_MultiCast)) {
-			//  if m not in hashset ....
-			// 		put message into hashset
-			// 		if myname != message.origSrc
-			//  	   	B_multicast
-			// 			call R_deliver()			
+			if (msg instanceof MultiCastTimestampedMessage) {
+				MultiCastTimestampedMessage MCMessage = (MultiCastTimestampedMessage) msg;
+//						new MultiCastTimestampedMessage(msg,localName,
+//								((MultiCastTimestampedMessage) msg).getGroupName(), Message_R_MultiCast);
+				if (!receivedMsg.contains(MCMessage)) {
+					receivedMsg.add(MCMessage);
+					if (!this.localName.equals(MCMessage.getOriginSrc())) {
+						B_MultiCast(MCMessage.getGroupName(), MCMessage);
+					}
+					R_Deliver(MCMessage);
+				}
+			} else {
+				Log.error("MultiCaster", "message type error!");
+			}
+			
 		} 		
 		
 		// Using CO_Multicast, call further methods
