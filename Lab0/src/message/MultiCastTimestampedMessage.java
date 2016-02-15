@@ -6,6 +6,7 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 	protected TimeStamp originTimestamp;
 	protected String originSrc;
 	protected String groupName;
+	
 	/**
 	 * Initializers
 	 * @param dest : destination of message as a name in the config file 
@@ -27,17 +28,6 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		this.groupName = groupName;
 		this.kind = kind;
 	}
-
-	
-//	public MultiCastTimestampedMessage(String dest, String kind, Object data, TimeStamp timeStamp, String oriSrc) {
-//		super(dest, kind, data);
-//	}
-//
-//
-//	public MultiCastTimestampedMessage copy(){
-//		return new MultiCastTimestampedMessage(dest, kind, data, timestamp, originSrc);
-//	}
-	
 	
 	// TODO: equals && hashcode
 	@Override
@@ -53,6 +43,18 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 	@Override
 	public String toString() {
 		return super.toString() + ", group = "+ groupName + ", sender = "+originSrc;
+	}
+
+	public TimeStamp getOriginTimestamp() {
+		return originTimestamp;
+	}
+
+	public String getOriginSrc() {
+		return originSrc;
+	}
+
+	public String getGroupName() {
+		return groupName;
 	}
 }
 

@@ -32,8 +32,8 @@ public class MultiCaster implements DistributedApplication {
 	private List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
 	
 	// CO multicast: V_i for each group g
-	private List<VectorTimeStamp> groupTimestamp;
-	private List<MultiCastTimestampedMessage> holdbackQueue;
+	private List<VectorTimeStamp> groupsTimestamp;
+	private List<MultiCastTimestampedMessage> holdbackQueue = new LinkedList<>();
 	
 	// TODO: R-multicast: check if identical
 	private Set<MultiCastTimestampedMessage> receivedMsg = new HashSet<>();
@@ -83,10 +83,10 @@ public class MultiCaster implements DistributedApplication {
 				groups.add(new MultiCastGroup(map));
 
 			//init V_i for each group g
-			groupTimestamp = new ArrayList<VectorTimeStamp>();
+			groupsTimestamp = new ArrayList<VectorTimeStamp>();
 			for (int i=0;i<groups.size();i++){
 				int size = groups.get(i).getGroupSize();
-				groupTimestamp.add(new VectorTimeStamp(size));
+				groupsTimestamp.add(new VectorTimeStamp(size));
 			}
 			Log.verbose("GROUPS", groups.toString());
 		} catch (FileNotFoundException e) {
@@ -196,19 +196,65 @@ public class MultiCaster implements DistributedApplication {
 			Log.error("MultiCaster", "Group not exist!");
 		}
 	}
-	
-	void CO_ReceiveHelper(Message msg) {
-		//place into queue
+
+	/**
+	 * When B_Deliver/R_Deliver, call helper that will place 
+	 * the message into queue
+	 * @param message multicast-ed message
+	 */
+	void CO_ReceiveHelper(Message message) {
+		if (message instanceof MultiCastTimestampedMessage){
+			holdbackQueue.add((MultiCastTimestampedMessage)message);
+		} else {
+			Log.error("MultiCaster", "CO_ReceiveHelper : "
+				+ "received non-multicast message");
+		}
 	}
 	
+	/**
+	 * Check check all message in queue, deliver if meet criteria
+	 */
 	void CO_CheckDeliver(){
-		// check all message in queue
-		// if OK
-		//		deliver; Vi_g[j]++
+		for (MultiCastTimestampedMessage message : holdbackQueue){
+			String groupName = message.getGroupName();
+			String origSrc = message.getOriginSrc();
+
+			// find info of group g and Vector V 
+			int groupIndex = getIndexByGroupName(groupName);
+			MultiCastGroup group = groups.get(groupIndex);
+			VectorTimeStamp groupTimestamp = groupsTimestamp.get(groupIndex);
+			
+			// Sender timestamp			
+			if (!(message.getTimeStamp() instanceof VectorTimeStamp)){
+				Log.error("MultiCaster", "CO_CheckDeliver : "
+					+ "received non-vector timestamp in multicast-ed message");
+				continue;
+			}			
+			VectorTimeStamp senderTimestamp = 
+					(VectorTimeStamp)message.getTimeStamp();
+			if (groupTimestamp.getSize()!=senderTimestamp.getSize()){
+				Log.error("MultiCaster", "CO_CheckDeliver : "
+						+ "received non-equal-sized vectortimestamp");
+				continue;
+			}
+			
+			boolean deliver = true;
+			
+			for (int i = 0; i < senderTimestamp.getSize();i++){
+				// TODO: add logic
+				deliver = false;
+			}
+			
+			if (deliver){
+				CO_Deliver(message);
+				int origIndex = group.getIndexByName(origSrc); // index of j
+				groupTimestamp.incrementVectorItem(origIndex); // Vi_g[j]++
+			}
+		}
 	}
 	
-	void CO_Deliver(Message msg) {
-		System.out.println("Multicast Deliver!  {CO_Deliver}"+msg);
+	void CO_Deliver(Message message) {
+		System.out.println("Multicast Deliver!  {CO_Deliver}"+message);
 	}
 
 }
