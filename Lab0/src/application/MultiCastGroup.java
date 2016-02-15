@@ -33,6 +33,13 @@ public class MultiCastGroup {
 		return members.size();
 	}
 	
+	public int getIndexByName(String name){
+		for (int i=0;i<members.size();i++)
+			if (members.get(i).equals(name))
+				return i;
+		return -1;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();

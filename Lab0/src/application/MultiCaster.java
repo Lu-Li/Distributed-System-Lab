@@ -15,6 +15,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
+import clock.VectorTimeStamp;
 import message.Broker;
 import message.Message;
 import message.MessagePasser;
@@ -29,7 +30,12 @@ public class MultiCaster implements DistributedApplication {
 
 	// groups
 	private List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
-	// TODO:
+	
+	// CO multicast: V_i for each group g
+	private List<VectorTimeStamp> groupTimestamp;
+	private List<MultiCastTimestampedMessage> holdbackQueue;
+	
+	// TODO: R-multicast: check if identical
 	private Set<MultiCastTimestampedMessage> receivedMsg = new HashSet<>();
 
 	// multicaster name
@@ -43,6 +49,9 @@ public class MultiCaster implements DistributedApplication {
 		broker.register(Message_CO_MultiCast, this);
 	}
 
+	/**
+	 * group helper functions
+	 */
 	public List<String> getAllMembersByGroupName(String groupName) {
 		for (int i = 0; i < groups.size(); i++) {
 			if (groups.get(i).getName().equals(groupName)) {
@@ -50,6 +59,15 @@ public class MultiCaster implements DistributedApplication {
 			}
 		}
 		return null;
+	}
+
+	public int getIndexByGroupName(String groupName) {
+		for (int i = 0; i < groups.size(); i++) {
+			if (groups.get(i).getName().equals(groupName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -64,6 +82,12 @@ public class MultiCaster implements DistributedApplication {
 			for (Map map : groupsMap)
 				groups.add(new MultiCastGroup(map));
 
+			//init V_i for each group g
+			groupTimestamp = new ArrayList<VectorTimeStamp>();
+			for (int i=0;i<groups.size();i++){
+				int size = groups.get(i).getGroupSize();
+				groupTimestamp.add(new VectorTimeStamp(size));
+			}
 			Log.verbose("GROUPS", groups.toString());
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found!");
@@ -71,62 +95,120 @@ public class MultiCaster implements DistributedApplication {
 		}
 	}
 
-	
-	public void B_MultiCast(String groupName, Message message) {
-		Log.info("MultiCaster", "B_MC ::"+message+"->"+groupName);
-		
-		List<String> members = getAllMembersByGroupName(groupName);
-		for (String name:members) {
-			MultiCastTimestampedMessage MCMessage = 
-					new MultiCastTimestampedMessage(message,name,groupName,Message_B_MultiCast);
-			Log.info("MultiCaster", "B_MC :"+MCMessage+" => "+name);
-			MessagePasser.send(MCMessage);
-		}
-	}
-
-	void B_Deliver(Message msg) {
-		// if we are only using B_multicast:
-		// sysout....
-		System.out.println("B_Deliver:"+msg.toString());
-		// if m not reeceived ....
-		// do sth
-		// call R_deliver()
-
-	}
-
-	// only original sender use r_multicast
-	public void R_MultiCast(String groupName, Message message) {
-		Log.info("MultiCaster", "R_MC :"+message.getData()+"->"+groupName);
-		TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
-		TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
-		Log.info("MultiCaster", "R_MC call B_MC: "+newMessage+" -> "+groupName);
-		B_MultiCast(groupName, newMessage);
-	}
-
-	void R_Deliver(Message msg) {
-		// sysout "get reliable m message:...."
-	}
-
-	void CO_MultiCast() {
-
-	}
-
-	void CO_Deliver() {
-
-	}
-
+	/**
+	 * DistApp methods
+	 */
 	@Override
 	public void OnMessage(Message msg) {
-		if (msg.getKind().equals(Message_B_MultiCast)) {
-			B_Deliver(msg);
-		} else if (msg.getKind().equals(Message_R_MultiCast)) {
-			R_Deliver(msg);
-		}
+		System.out.println("ReceivedMulticast:"+msg.toString());
+
+		// When received a message, that must be B_Multicast-ed message
+		// deliver the message directly according to the algorithm 
+		B_Deliver(msg);
 	}
 
 	@Override
 	public String getAppName() {
 		return "MultiCaster";
+	}
+
+
+	/**
+	 * B_Multicast methods
+	 */
+	public void B_MultiCast(String groupName, Message message) {
+		Log.info("MultiCaster", "B_MC ::"+message+"->"+groupName);
+		
+		List<String> members = getAllMembersByGroupName(groupName);
+		for (String dest:members) {
+			String msgType = message.getKind();
+			if (!msgType.equals(Message_CO_MultiCast)  
+				&& !msgType.equals(Message_R_MultiCast))
+				msgType = Message_B_MultiCast;
+			MultiCastTimestampedMessage MCMessage = 
+					new MultiCastTimestampedMessage(message,dest,groupName,msgType);
+			Log.info("MultiCaster", "B_MC :"+MCMessage+" => "+dest);
+			MessagePasser.send(MCMessage);
+		}
+	}
+	
+	
+	void B_Deliver(Message msg) {
+		Log.info("MultiCaster","B_Deliver: "+msg);
+		
+		// Using B_Multicast, deliver to caller app (use sysout instead)
+		if (msg.getKind().equals(Message_B_MultiCast)) {
+			System.out.println("Multicast Deliver!  {B_Deliver}"+msg);
+		}
+		
+		// Using R_Multicast, call further methods
+		if (msg.getKind().equals(Message_R_MultiCast)) {
+			//  if m not in hashset ....
+			// 		put message into hashset
+			// 		if myname != message.origSrc
+			//  	   	B_multicast
+			// 			call R_deliver()			
+		} 		
+		
+		// Using CO_Multicast, call further methods
+		if (msg.getKind().equals(Message_CO_MultiCast)) {
+			CO_ReceiveHelper(msg);
+		}
+	}
+	
+	/**
+	 * R_Multicast methods
+	 */
+	public void R_MultiCast(String groupName, Message message) {
+		Log.info("MultiCaster", "R_MC :"+message.getData()+"->"+groupName);
+		
+		TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
+		TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
+		
+		Log.info("MultiCaster", "R_MC call B_MC: "+newMessage+" -> "+groupName);
+		
+		B_MultiCast(groupName, newMessage);
+	}
+
+	void R_Deliver(Message msg) {
+		Log.info("MultiCaster","R_Deliver: "+msg);
+
+		// Using R_Multicast, deliver to caller app
+		if (msg.getKind().equals(Message_R_MultiCast)) { 
+			System.out.println("Multicast Deliver! {R_Deliver}"+msg);
+		}		
+		// Using CO_Multicast, call further methods
+		if (msg.getKind().equals(Message_CO_MultiCast)) {
+			CO_ReceiveHelper(msg);
+		}
+		
+	}
+
+	/**
+	 * CO_Multicast methods
+	 */
+	void CO_MultiCast(String groupName, Message message) {
+		int groupIndex = getIndexByGroupName(groupName);
+		if (groupIndex != -1){
+			String myName = MessagePasser.getLocalName();
+			int myIndex = groups.get(groupIndex).getIndexByName(myName);
+		} else {
+			Log.error("MultiCaster", "Group not exist!");
+		}
+	}
+	
+	void CO_ReceiveHelper(Message msg) {
+		//place into queue
+	}
+	
+	void CO_CheckDeliver(){
+		// check all message in queue
+		// if OK
+		//		deliver; Vi_g[j]++
+	}
+	
+	void CO_Deliver(Message msg) {
+		System.out.println("Multicast Deliver!  {CO_Deliver}"+msg);
 	}
 
 }

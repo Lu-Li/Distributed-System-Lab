@@ -62,6 +62,7 @@ public class VectorTimeStamp extends TimeStamp {
 	}
 	
 	// identical, not only parallel
+	@Override
 	public boolean isIdenticalTo(TimeStamp o) {
 		if (o instanceof VectorTimeStamp){
 			//get vector of the other timestamp

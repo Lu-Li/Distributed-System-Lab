@@ -49,4 +49,11 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 	public int hashCode() {
 		return super.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + ", group = "+ groupName + ", sender = "+originSrc;
+	}
 }
+
+

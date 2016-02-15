@@ -40,7 +40,8 @@ public class LogicalTimeStamp extends TimeStamp{
 	public String toString() {		
 		return "LTS:"+logicalTime;
 	}
-
+	
+	// identical, not only parallel
 	@Override
 	public boolean isIdenticalTo(TimeStamp o) {
 		if (o instanceof LogicalTimeStamp){
