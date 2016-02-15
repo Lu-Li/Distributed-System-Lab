@@ -192,6 +192,7 @@ public class MultiCaster implements DistributedApplication {
 		if (groupIndex != -1){
 			String myName = MessagePasser.getLocalName();
 			int myIndex = groups.get(groupIndex).getIndexByName(myName);
+			// TODO : add logic and B_MC
 		} else {
 			Log.error("MultiCaster", "Group not exist!");
 		}
@@ -240,8 +241,10 @@ public class MultiCaster implements DistributedApplication {
 			
 			boolean deliver = true;
 			
-			for (int i = 0; i < senderTimestamp.getSize();i++){
+			for (int k = 0; k < senderTimestamp.getSize(); k++){
 				// TODO: add logic
+				// if Vj[j] = vi[j]+1 && vj[k]<=vi[k]
+				// 	   true
 				deliver = false;
 			}
 			
