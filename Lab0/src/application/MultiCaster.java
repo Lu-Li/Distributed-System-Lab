@@ -271,6 +271,7 @@ public class MultiCaster implements DistributedApplication {
 		Log.verbose("MultiCaster", "CO_CheckDeliver");
 
 		int index = 0;
+		boolean finished = true;
 		// for (MultiCastTimestampedMessage message : holdbackQueue) {
 		while (index < holdbackQueue.size()) {
 			MultiCastTimestampedMessage message = holdbackQueue.get(index);
@@ -322,6 +323,7 @@ public class MultiCaster implements DistributedApplication {
 			}
 
 			if (deliver) {
+				finished = false;
 				CO_Deliver(message);
 				myTimestamp.incrementVectorItem(senderIndex); // Vi_g[j]++
 				Log.verbose("MultiCaster", "Vi_g[j]++ : "+" j="+senderIndex + " Vi="+myTimestamp);
@@ -330,6 +332,10 @@ public class MultiCaster implements DistributedApplication {
 				index++;
 			}
 		}
+		
+		// Changed, do again
+		if (!finished)
+			CO_CheckDeliver();
 	}
 
 	void CO_Deliver(Message message) {

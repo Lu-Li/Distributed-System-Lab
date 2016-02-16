@@ -21,14 +21,12 @@ configuration :
     port : 10040
 
 sendRules :
-  - action : dropAfter 
-    src : a
-    seqNum: 4
-
+  - action : delay
+    src : d
 receiveRules :
-  - action : dropAfter 
+  - action : delay
+    src : a
     dest : c
-    seqNum: 4
 
 clockType : Vector
 
