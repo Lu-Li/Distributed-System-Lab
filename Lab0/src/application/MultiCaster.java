@@ -121,7 +121,7 @@ public class MultiCaster implements DistributedApplication {
 			MessagePasser.send(MCMessage);
 		}
 	}
-
+boolean recieve = false;
 	void B_Deliver(Message msg) {
 		Log.info("MultiCaster", "B_Deliver: " + msg);
 
@@ -147,7 +147,6 @@ public class MultiCaster implements DistributedApplication {
 			} else {
 				Log.error("MultiCaster", "message type error!");
 			}
-
 		}
 
 		// Using CO_Multicast, call further methods
@@ -235,7 +234,11 @@ public class MultiCaster implements DistributedApplication {
 	 * Check check all message in queue, deliver if meet criteria
 	 */
 	void CO_CheckDeliver() {
-		for (MultiCastTimestampedMessage message : holdbackQueue) {
+		int index = 0;
+//		for (MultiCastTimestampedMessage message : holdbackQueue) {
+		while (index < holdbackQueue.size()){
+			MultiCastTimestampedMessage message = holdbackQueue.get(index);
+		
 			String sendergroupName = message.getGroupName();
 			String senderName = message.getOriginSrc();
 
@@ -282,6 +285,9 @@ public class MultiCaster implements DistributedApplication {
 			if (deliver) {
 				CO_Deliver(message);
 				myTimestamp.incrementVectorItem(senderIndex); // Vi_g[j]++
+				holdbackQueue.remove(index);				
+			} else {
+				index++;
 			}
 		}
 	}

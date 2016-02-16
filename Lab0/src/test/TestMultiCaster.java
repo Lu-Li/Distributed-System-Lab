@@ -107,14 +107,16 @@ public class TestMultiCaster {
 					System.out.print("content:");
 					payload = scanner.next();
 					message = new Message("", "", payload);					
-					multiCaster.B_MultiCast(groupName, message);				
+					multiCaster.B_MultiCast(groupName, message);
+					break;
 				case 7:
 					System.out.print("destination group:");
 					groupName = scanner.next();
 					System.out.print("content:");
 					payload = scanner.next();
 					message = new Message("", "", payload);
-					multiCaster.R_MultiCast(groupName, message);				
+					multiCaster.R_MultiCast(groupName, message);
+					break;
 				default:
 					MessagePasser.terminateAll();
 					return;
