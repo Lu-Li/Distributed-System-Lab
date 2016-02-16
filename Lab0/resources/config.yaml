@@ -7,17 +7,17 @@
 # The local node’s name is included in this list
 configuration :
   - name : a
-    ip : 172.29.92.200
+    ip : 172.29.93.215
     port : 10010    # This is the incoming port on which MP will listen
                     # May be changed for further communication as usual
   - name : b
-    ip :  172.29.92.200
+    ip :  172.29.93.215
     port : 10020
   - name : c
-    ip : 172.29.92.200
+    ip : 172.29.93.215
     port : 10030
   - name : d
-    ip : 172.29.92.200
+    ip : 172.29.93.215
     port : 10040
 
 sendRules :

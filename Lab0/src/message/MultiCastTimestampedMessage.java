@@ -1,5 +1,7 @@
 package message;
 
+import java.util.Objects;
+
 import clock.TimeStamp;
 
 public class MultiCastTimestampedMessage extends TimestampedMessage{
@@ -21,7 +23,7 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 			this.originTimestamp = ((MultiCastTimestampedMessage) message).originTimestamp;
 			this.groupName = ((MultiCastTimestampedMessage) message).groupName;		
 		} else {			
-			this.originSrc = this.src;
+			this.originSrc = MessagePasser.getLocalName();
 			this.originTimestamp = this.timestamp;
 		}
 		this.dest = dest;
@@ -29,22 +31,49 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		this.kind = kind;
 	}
 	
-
-	// TODO: equals && hashcode
-	@Override
-	public boolean equals(Object obj) {		
-		return super.equals(obj);
-	}
-	
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
 	
 	@Override
 	public String toString() {
 		return super.toString() + ", group = "+ groupName + ", sender = "+originSrc;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((groupName == null) ? 0 : groupName.hashCode());
+		result = prime * result + ((originSrc == null) ? 0 : originSrc.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MultiCastTimestampedMessage other = (MultiCastTimestampedMessage) obj;
+		if (groupName == null) {
+			if (other.groupName != null)
+				return false;
+		} else if (!groupName.equals(other.groupName))
+			return false;
+		if (originSrc == null) {
+			if (other.originSrc != null)
+				return false;
+		} else if (!originSrc.equals(other.originSrc))
+			return false;
+		if (originTimestamp == null) {
+			if (other.originTimestamp != null)
+				return false;
+		} else if (!originTimestamp.isIdenticalTo(other.originTimestamp))
+			return false;
+		return true;
+	}
+
 
 	public TimeStamp getOriginTimestamp() {
 		return originTimestamp;
