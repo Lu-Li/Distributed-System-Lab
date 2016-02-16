@@ -28,6 +28,14 @@ public class MultiCastGroup {
 		}
 
 	}
+	public void printAllTimestamp() {
+		System.out.println("--- all timestamp for group "+getName()+" ---");
+		for (int i=0;i<members.size();i++){
+			System.out.print(members.get(i)+" : ");
+			System.out.println(membersTimestamp.get(i));
+		} 
+		System.out.println("---------------------------------------------");
+	}
 	
 	public String getName() {
 		return name;

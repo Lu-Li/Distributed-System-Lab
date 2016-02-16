@@ -4,25 +4,29 @@ import java.util.Objects;
 
 import clock.TimeStamp;
 
-public class MultiCastTimestampedMessage extends TimestampedMessage{
+public class MultiCastTimestampedMessage extends TimestampedMessage {
 	protected TimeStamp originTimestamp;
 	protected String originSrc;
 	protected String groupName;
-	
+
 	/**
 	 * Initializers
-	 * @param dest : destination of message as a name in the config file 
-	 * @param kind : kind of message that would be feed into Broker
-	 * @param data : payload, determined by kind
+	 * 
+	 * @param dest
+	 *            : destination of message as a name in the config file
+	 * @param kind
+	 *            : kind of message that would be feed into Broker
+	 * @param data
+	 *            : payload, determined by kind
 	 */
-	
-	public MultiCastTimestampedMessage(Message message, String dest,String groupName,String kind) {
+
+	public MultiCastTimestampedMessage(Message message, String dest, String groupName, String kind) {
 		super(message);
-		if (message instanceof MultiCastTimestampedMessage){			
+		if (message instanceof MultiCastTimestampedMessage) {
 			this.originSrc = ((MultiCastTimestampedMessage) message).originSrc;
 			this.originTimestamp = ((MultiCastTimestampedMessage) message).originTimestamp;
-			this.groupName = ((MultiCastTimestampedMessage) message).groupName;		
-		} else {			
+			this.groupName = ((MultiCastTimestampedMessage) message).groupName;
+		} else {
 			this.originSrc = MessagePasser.getLocalName();
 			this.originTimestamp = this.timestamp;
 		}
@@ -30,11 +34,10 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		this.groupName = groupName;
 		this.kind = kind;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return super.toString() + ", group = "+ groupName + ", sender = "+originSrc;
+		return super.toString() + ", group = " + groupName + ", sender = " + originSrc + ", origTS:" + originTimestamp;
 	}
 
 	@Override
@@ -45,7 +48,6 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		result = prime * result + ((originSrc == null) ? 0 : originSrc.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -74,11 +76,9 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		return true;
 	}
 
-
 	public TimeStamp getOriginTimestamp() {
 		return originTimestamp;
 	}
-
 
 	public String getOriginSrc() {
 		return originSrc;
@@ -92,5 +92,3 @@ public class MultiCastTimestampedMessage extends TimestampedMessage{
 		this.groupName = groupName;
 	}
 }
-
-

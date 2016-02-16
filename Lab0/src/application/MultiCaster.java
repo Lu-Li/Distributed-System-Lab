@@ -29,7 +29,7 @@ public class MultiCaster implements DistributedApplication {
 	private final static String Message_CO_MultiCast = "CO_MultiCast";
 
 	// groups
-	private List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
+	public List<MultiCastGroup> groups = new ArrayList<MultiCastGroup>();
 
 	// CO multicast: V_i for each group g
 	private List<MultiCastTimestampedMessage> holdbackQueue = new LinkedList<>();
@@ -93,7 +93,7 @@ public class MultiCaster implements DistributedApplication {
 	 */
 	@Override
 	public void OnMessage(Message msg) {
-		System.out.println("ReceivedMulticast:" + msg.toString());
+		Log.info("MultiCaster", "ReceivedMulticast:" + msg.toString());
 
 		// When received a message, that must be B_Multicast-ed message
 		// deliver the message directly according to the algorithm
@@ -119,9 +119,18 @@ public class MultiCaster implements DistributedApplication {
 				List<String> members = getAllMembersByGroupName(groupName);
 				for (String dest : members) {
 					String msgType = message.getKind();
+										
 					if (!msgType.equals(Message_CO_MultiCast) && !msgType.equals(Message_R_MultiCast))
 						msgType = Message_B_MultiCast;
-					MultiCastTimestampedMessage MCMessage = new MultiCastTimestampedMessage(message, dest, groupName, msgType);
+					MultiCastTimestampedMessage MCMessage = new MultiCastTimestampedMessage(message, dest, groupName,
+							msgType);
+					
+					if(msgType.equals(Message_CO_MultiCast) && dest.equals(myName)){
+						Log.verbose("MultiCaster", "B_MultiCast self-deliver CO_MC directly");						
+						CO_Deliver(MCMessage);						
+						continue;
+					}
+					
 					Log.info("MultiCaster", "B_MC :" + MCMessage + " => " + dest);
 					MessagePasser.send(MCMessage);
 				}
@@ -132,7 +141,7 @@ public class MultiCaster implements DistributedApplication {
 			Log.error("MultiCaster", "Group not exist!");
 		}
 	}
-	
+
 	void B_Deliver(Message msg) {
 		Log.info("MultiCaster", "B_Deliver: " + msg);
 
@@ -177,7 +186,7 @@ public class MultiCaster implements DistributedApplication {
 		if (groupIndex != -1) {
 			String myName = MessagePasser.getLocalName();
 			if (myGroup.getIndexByName(myName) != -1) {
-				//NOTE: in case race condition
+				// NOTE: in case race condition
 				TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
 				TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
 
@@ -186,10 +195,10 @@ public class MultiCaster implements DistributedApplication {
 				B_MultiCast(groupName, newMessage);
 			} else {
 				Log.error("MultiCaster", "I'm not in that group!");
-			}		
+			}
 		} else {
 			Log.error("MultiCaster", "Group not exist!");
-		}		
+		}
 	}
 
 	void R_Deliver(Message msg) {
@@ -209,7 +218,7 @@ public class MultiCaster implements DistributedApplication {
 	/**
 	 * CO_Multicast methods
 	 */
-	void CO_MultiCast(String groupName, Message message) {
+	public void CO_MultiCast(String groupName, Message message) {
 		int groupIndex = getIndexByGroupName(groupName);
 		MultiCastGroup myGroup = groups.get(groupIndex);
 
@@ -222,12 +231,12 @@ public class MultiCaster implements DistributedApplication {
 			if (myGroupTimestamp != null) {
 				int myIndex = myGroup.getIndexByName(myName);
 				myGroupTimestamp.incrementVectorItem(myIndex);
-				Log.info("MultiCaster", "CO_MC -> B_MC | " + "myGroupTimestamp:" + myGroupTimestamp);
 
-				//set timestamp as Vi_g
+				// set timestamp as Vi_g
 				TimestampedMessage newMessage = new TimestampedMessage("", Message_CO_MultiCast, message.getData());
 				newMessage.setTimeStamp(myGroupTimestamp);
-				
+
+				Log.info("MultiCaster", "CO_MC -> B_MC | " + "myGroupTimestamp:" + myGroupTimestamp);
 				B_MultiCast(groupName, newMessage);
 			} else {
 				Log.error("MultiCaster", "I'm not in that group!");
@@ -247,7 +256,9 @@ public class MultiCaster implements DistributedApplication {
 	 */
 	void CO_ReceiveHelper(Message message) {
 		if (message instanceof MultiCastTimestampedMessage) {
+			Log.verbose("MultiCaster", "CO_ReceiveHelper");
 			holdbackQueue.add((MultiCastTimestampedMessage) message);
+			CO_CheckDeliver();		
 		} else {
 			Log.error("MultiCaster", "CO_ReceiveHelper : " + "received non-multicast message");
 		}
@@ -257,11 +268,13 @@ public class MultiCaster implements DistributedApplication {
 	 * Check check all message in queue, deliver if meet criteria
 	 */
 	void CO_CheckDeliver() {
+		Log.verbose("MultiCaster", "CO_CheckDeliver");
+
 		int index = 0;
-//		for (MultiCastTimestampedMessage message : holdbackQueue) {
-		while (index < holdbackQueue.size()){
+		// for (MultiCastTimestampedMessage message : holdbackQueue) {
+		while (index < holdbackQueue.size()) {
 			MultiCastTimestampedMessage message = holdbackQueue.get(index);
-		
+
 			String sendergroupName = message.getGroupName();
 			String senderName = message.getOriginSrc();
 
@@ -274,16 +287,19 @@ public class MultiCaster implements DistributedApplication {
 			VectorTimeStamp myTimestamp = group.getTimestampByName(myName);
 
 			// Sender timestamp
-			if (!(message.getTimeStamp() instanceof VectorTimeStamp)) {
+			if (!(message.getOriginTimestamp() instanceof VectorTimeStamp)) {
 				Log.error("MultiCaster",
 						"CO_CheckDeliver : " + "received non-vector timestamp in multicast-ed message");
+				index++;
 				continue;
 			}
 
 			// check if both timestamp are valid
-			VectorTimeStamp senderTimestamp = (VectorTimeStamp) message.getTimeStamp();
+			VectorTimeStamp senderTimestamp = (VectorTimeStamp)message.getOriginTimestamp();
 			if (myTimestamp.getSize() != senderTimestamp.getSize()) {
-				Log.error("MultiCaster", "CO_CheckDeliver : " + "received non-equal-sized vectortimestamp");
+				Log.error("MultiCaster", "CO_CheckDeliver : " + "received non-equal-sized vectortimestamp. senderTS:"
+						+ senderTimestamp + " myTS:" + myTimestamp);
+				index++;
 				continue;
 			}
 
@@ -308,7 +324,8 @@ public class MultiCaster implements DistributedApplication {
 			if (deliver) {
 				CO_Deliver(message);
 				myTimestamp.incrementVectorItem(senderIndex); // Vi_g[j]++
-				holdbackQueue.remove(index);				
+				Log.verbose("MultiCaster", "Vi_g[j]++ : "+" j="+senderIndex + " Vi="+myTimestamp);
+				holdbackQueue.remove(index);
 			} else {
 				index++;
 			}

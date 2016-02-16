@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import application.LogEntry;
 import application.Logger;
+import application.MultiCastGroup;
 import application.MultiCaster;
 import clock.ClockServiceFactory;
 import clock.TimeStamp;
@@ -46,6 +47,8 @@ public class TestMultiCaster {
 			System.out.println("5. issue a timestamp");
 			System.out.println("6. B_multicast a message");
 			System.out.println("7. R_multicast a message");
+			System.out.println("8. CO_multicast a message");
+			System.out.println("9. CO_multicast Group Clock Vector");
 			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
@@ -117,6 +120,23 @@ public class TestMultiCaster {
 					message = new Message("", "", payload);
 					multiCaster.R_MultiCast(groupName, message);
 					break;
+				case 8:
+					System.out.print("destination group:");
+					groupName = scanner.next();
+					System.out.print("content:");
+					payload = scanner.next();
+					message = new Message("", "", payload);
+					multiCaster.CO_MultiCast(groupName, message);
+					break;	
+				case 9:
+					System.out.print("groupName:");
+					groupName = scanner.next();
+					int groupIndex = multiCaster.getIndexByGroupName(groupName);
+					if (groupIndex>=0){
+						MultiCastGroup group = multiCaster.groups.get(groupIndex);
+						group.printAllTimestamp();
+					}
+					break;	
 				default:
 					MessagePasser.terminateAll();
 					return;
