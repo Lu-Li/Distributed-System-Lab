@@ -111,17 +111,28 @@ public class MultiCaster implements DistributedApplication {
 	public void B_MultiCast(String groupName, Message message) {
 		Log.info("MultiCaster", "B_MC ::" + message + "->" + groupName);
 
-		List<String> members = getAllMembersByGroupName(groupName);
-		for (String dest : members) {
-			String msgType = message.getKind();
-			if (!msgType.equals(Message_CO_MultiCast) && !msgType.equals(Message_R_MultiCast))
-				msgType = Message_B_MultiCast;
-			MultiCastTimestampedMessage MCMessage = new MultiCastTimestampedMessage(message, dest, groupName, msgType);
-			Log.info("MultiCaster", "B_MC :" + MCMessage + " => " + dest);
-			MessagePasser.send(MCMessage);
+		int groupIndex = getIndexByGroupName(groupName);
+		MultiCastGroup myGroup = groups.get(groupIndex);
+		if (groupIndex != -1) {
+			String myName = MessagePasser.getLocalName();
+			if (myGroup.getIndexByName(myName) != -1) {
+				List<String> members = getAllMembersByGroupName(groupName);
+				for (String dest : members) {
+					String msgType = message.getKind();
+					if (!msgType.equals(Message_CO_MultiCast) && !msgType.equals(Message_R_MultiCast))
+						msgType = Message_B_MultiCast;
+					MultiCastTimestampedMessage MCMessage = new MultiCastTimestampedMessage(message, dest, groupName, msgType);
+					Log.info("MultiCaster", "B_MC :" + MCMessage + " => " + dest);
+					MessagePasser.send(MCMessage);
+				}
+			} else {
+				Log.error("MultiCaster", "I'm not in that group!");
+			}
+		} else {
+			Log.error("MultiCaster", "Group not exist!");
 		}
 	}
-boolean recieve = false;
+	
 	void B_Deliver(Message msg) {
 		Log.info("MultiCaster", "B_Deliver: " + msg);
 
@@ -161,12 +172,24 @@ boolean recieve = false;
 	public void R_MultiCast(String groupName, Message message) {
 		Log.info("MultiCaster", "R_MC :" + message.getData() + "->" + groupName);
 
-		TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
-		TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
+		int groupIndex = getIndexByGroupName(groupName);
+		MultiCastGroup myGroup = groups.get(groupIndex);
+		if (groupIndex != -1) {
+			String myName = MessagePasser.getLocalName();
+			if (myGroup.getIndexByName(myName) != -1) {
+				//NOTE: in case race condition
+				TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
+				TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
 
-		Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);
+				Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);
 
-		B_MultiCast(groupName, newMessage);
+				B_MultiCast(groupName, newMessage);
+			} else {
+				Log.error("MultiCaster", "I'm not in that group!");
+			}		
+		} else {
+			Log.error("MultiCaster", "Group not exist!");
+		}		
 	}
 
 	void R_Deliver(Message msg) {
