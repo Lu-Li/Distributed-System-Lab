@@ -1,8 +1,15 @@
 package application;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import org.yaml.snakeyaml.Yaml;
 
 import message.Broker;
 import message.Message;
@@ -25,7 +32,8 @@ public class Locker implements DistributedApplication{
 	
 	static MultiCaster multiCaster;
 		
-	public Locker(Broker broker,MultiCaster mc) {
+	public Locker(String configFilename, Broker broker,MultiCaster mc) {
+		this.parseConfigFile(configFilename);
 		broker.register("ack", this);
 		enable();
 		multiCaster = mc;
@@ -47,6 +55,31 @@ public class Locker implements DistributedApplication{
 		return enabled;
 	}
 	
+	/**
+	 * parseConfigFile
+	 * @param filename
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void parseConfigFile(String filename) {
+		InputStream input;
+		try {
+			input = new FileInputStream(new File(filename));
+			Yaml yaml = new Yaml();
+
+			Map config = (Map) yaml.load(input);
+			List<Map> network = (List<Map>) config.get("configuration");
+			for (Map map : network) {
+				String name = (String) map.get("name");
+				if (name.equals(MessagePasser.getLocalName())) {
+					myGroup = (String) map.get("memberOf");
+				}
+			}
+			System.out.println("myGroup = " + myGroup);
+		} catch (FileNotFoundException e) {
+			System.err.println("File not found!");
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * functionalities
 	 */

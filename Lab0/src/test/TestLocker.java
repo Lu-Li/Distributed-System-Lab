@@ -35,7 +35,7 @@ public class TestLocker {
 		//applications
 		Logger logger = new Logger(args[0], args[1],broker);
 		MultiCaster multiCaster = new MultiCaster(args[0], args[1],broker);
-		Locker locker = new Locker(broker,multiCaster);
+		Locker locker = new Locker(args[0], broker, multiCaster);
 		
 		// simple UI
 		boolean done = false;

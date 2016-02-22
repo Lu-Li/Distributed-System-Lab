@@ -9,25 +9,31 @@ configuration :
   - name : a
     ip : 172.29.92.43
     port : 10010    # This is the incoming port on which MP will listen
-                    # May be changed for further communication as usual
+    memberOf : G1               # May be changed for further communication as usual
   - name : b
     ip : 172.29.92.43
     port : 10020
+    memberOf : G2
   - name : c
     ip : 172.29.92.43
     port : 10030
+    memberOf : G3
   - name : d
     ip : 172.29.92.43
     port : 10040
+    memberOf : G4
   - name : e
     ip : 172.29.92.43
     port : 10050
+    memberOf : G5
   - name : f
     ip : 172.29.92.43
     port : 10060
+    memberOf : G6
   - name : g
     ip : 172.29.92.43
     port : 10070
+    memberOf : G7
 
 sendRules :
   - action : drop
