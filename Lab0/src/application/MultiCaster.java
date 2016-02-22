@@ -215,7 +215,7 @@ public class MultiCaster implements DistributedApplication {
 						src = ((MultiCastTimestampedMessage) msg).getOriginSrc();
 					else
 						src = msg.getSrc();
-					Locker.onMessage(content, src);
+					Locker.onEvent(content, src);
 				}
 			} else {
 				System.out.println("Multicast Deliver!  {R_Deliver}" + msg);
