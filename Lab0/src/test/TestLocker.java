@@ -35,7 +35,7 @@ public class TestLocker {
 		//applications
 		Logger logger = new Logger(args[0], args[1],broker);
 		MultiCaster multiCaster = new MultiCaster(args[0], args[1],broker);
-		Locker locker = new Locker(broker);
+		Locker locker = new Locker(broker,multiCaster);
 		
 		// simple UI
 		boolean done = false;
@@ -54,10 +54,13 @@ public class TestLocker {
 				
 				switch (selection) {
 				case 1:
+					Locker.requestLock();
 					break;
 				case 2:
+					Locker.releaseLock();
 					break;
 				case 3:
+					Locker.reportStatus();
 					break;
 				default:
 					MessagePasser.terminateAll();
