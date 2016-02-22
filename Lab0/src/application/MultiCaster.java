@@ -168,11 +168,6 @@ public class MultiCaster implements DistributedApplication {
 				Log.error("MultiCaster", "message type error!");
 			}
 		}
-
-//		// Using CO_Multicast, call further methods
-//		if (msg.getKind().equals(Message_CO_MultiCast)) {
-//			CO_ReceiveHelper(msg);
-//		}
 	}
 
 	/**
@@ -211,7 +206,20 @@ public class MultiCaster implements DistributedApplication {
 
 		// Using R_Multicast, deliver to caller app
 		if (msg.getKind().equals(Message_R_MultiCast)) {
-			System.out.println("Multicast Deliver! {R_Deliver}" + msg);
+			//used in multicast
+			if (Locker.isEnabled()){
+				if (msg.getData() instanceof String){
+					String src = "";
+					String content = (String) msg.getData();
+					if (msg instanceof MultiCastTimestampedMessage)
+						src = ((MultiCastTimestampedMessage) msg).getOriginSrc();
+					else
+						src = msg.getSrc();
+					Locker.onMessage(content, src);
+				}
+			} else {
+				System.out.println("Multicast Deliver!  {R_Deliver}" + msg);
+			}
 		}
 		// Using CO_Multicast, call further methods
 		if (msg.getKind().equals(Message_CO_MultiCast)) {
