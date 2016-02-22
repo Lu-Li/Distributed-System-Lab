@@ -53,7 +53,7 @@ public class TimestampedMessage extends Message{
 		return this.timestamp;
 	}
 	
-	public void setTimeStamp(TimeStamp timeStamp) {
+	public void setTimeStamp(TimeStamp timeStamp) {		
 		this.timestamp = timeStamp;
 	}
 

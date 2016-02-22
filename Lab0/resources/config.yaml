@@ -7,26 +7,33 @@
 # The local node’s name is included in this list
 configuration :
   - name : a
-    ip : 172.29.92.200
+    ip : 172.29.92.43
     port : 10010    # This is the incoming port on which MP will listen
                     # May be changed for further communication as usual
   - name : b
-    ip : 172.29.92.200
+    ip : 172.29.92.43
     port : 10020
   - name : c
-    ip : 172.29.92.200
+    ip : 172.29.92.43
     port : 10030
   - name : d
-    ip : 172.29.92.200
+    ip : 172.29.92.43
     port : 10040
 
 sendRules :
-  - action : delay
-    src : d
-receiveRules :
-  - action : delay
+  - action : drop
+    src : a
+    dest : b
+  - action : drop
     src : a
     dest : c
+    kind : delay
+
+receiveRules :
+  - action : drop
+    src : a
+    dest : b
+    kind : ddd
 
 clockType : Vector
 
@@ -39,5 +46,3 @@ groups :
   - name : G2
     members :
       - d
-      - b
-      - c

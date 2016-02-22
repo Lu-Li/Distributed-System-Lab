@@ -125,7 +125,7 @@ public class MultiCaster implements DistributedApplication {
 					MultiCastTimestampedMessage MCMessage = new MultiCastTimestampedMessage(message, dest, groupName,
 							msgType);
 					
-					if(msgType.equals(Message_CO_MultiCast) && dest.equals(myName)){
+					if(msgType.equals(Message_CO_MultiCast) && dest.equals(myName)  && message.getSrc() == null){
 						Log.verbose("MultiCaster", "B_MultiCast self-deliver CO_MC directly");						
 						CO_Deliver(MCMessage);						
 						continue;
@@ -151,7 +151,7 @@ public class MultiCaster implements DistributedApplication {
 		}
 
 		// Using R_Multicast, call further methods
-		if (msg.getKind().equals(Message_R_MultiCast)) {
+		if (msg.getKind().equals(Message_R_MultiCast) || msg.getKind().equals(Message_CO_MultiCast)) {
 			if (msg instanceof MultiCastTimestampedMessage) {
 				MultiCastTimestampedMessage MCMessage = (MultiCastTimestampedMessage) msg;
 				// new MultiCastTimestampedMessage(msg,localName,
@@ -169,10 +169,10 @@ public class MultiCaster implements DistributedApplication {
 			}
 		}
 
-		// Using CO_Multicast, call further methods
-		if (msg.getKind().equals(Message_CO_MultiCast)) {
-			CO_ReceiveHelper(msg);
-		}
+//		// Using CO_Multicast, call further methods
+//		if (msg.getKind().equals(Message_CO_MultiCast)) {
+//			CO_ReceiveHelper(msg);
+//		}
 	}
 
 	/**
@@ -187,8 +187,13 @@ public class MultiCaster implements DistributedApplication {
 			String myName = MessagePasser.getLocalName();
 			if (myGroup.getIndexByName(myName) != -1) {
 				// NOTE: in case race condition
-				TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
-				TimestampedMessage newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
+				Message newMessage = null;
+				if (message.getKind().equals(Message_CO_MultiCast)){
+					newMessage = message;
+				} else {
+					TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
+					newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
+				}
 
 				Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);
 
@@ -234,10 +239,11 @@ public class MultiCaster implements DistributedApplication {
 
 				// set timestamp as Vi_g
 				TimestampedMessage newMessage = new TimestampedMessage("", Message_CO_MultiCast, message.getData());
-				newMessage.setTimeStamp(myGroupTimestamp);
+				
+				newMessage.setTimeStamp(new VectorTimeStamp(myGroupTimestamp));
 
 				Log.info("MultiCaster", "CO_MC -> B_MC | " + "myGroupTimestamp:" + myGroupTimestamp);
-				B_MultiCast(groupName, newMessage);
+				R_MultiCast(groupName, newMessage);
 			} else {
 				Log.error("MultiCaster", "I'm not in that group!");
 			}

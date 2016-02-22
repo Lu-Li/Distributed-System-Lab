@@ -92,16 +92,16 @@ public class MessagePasser {
 			config = new Configuration(configurationFileName);
 		else
 			config = new Configuration();
-
+		String dest = message.dest;
 		
 		// get sequence number from hashmap
-		Integer seqNumber = seqNumberMap.get(src);
+		Integer seqNumber = seqNumberMap.get(dest);
 		int seq = 0;
 		if (seqNumber == null)
 			seqNumber = new Integer(0);
 		else 
 			seq = ++seqNumber;
-		seqNumberMap.put(src, seqNumber);
+		seqNumberMap.put(dest, seqNumber);
 		
 		// set message parameters
 		message.set_seqNum(seq);
