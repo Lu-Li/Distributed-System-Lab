@@ -19,6 +19,15 @@ configuration :
   - name : d
     ip : 172.29.92.43
     port : 10040
+  - name : e
+    ip : 172.29.92.43
+    port : 10050
+  - name : f
+    ip : 172.29.92.43
+    port : 10060
+  - name : g
+    ip : 172.29.92.43
+    port : 10070
 
 sendRules :
   - action : drop
@@ -45,4 +54,31 @@ groups :
       - c
   - name : G2
     members :
+      - b
       - d
+      - f
+  - name : G3
+    members :
+      - c
+      - e
+      - f
+  - name : G4
+    members :
+      - a
+      - d
+      - e
+  - name : G5
+    members :
+      - b
+      - e
+      - g
+  - name : G6
+    members :
+      - a
+      - f
+      - g
+  - name : G7
+    members :
+      - c
+      - d
+      - g
