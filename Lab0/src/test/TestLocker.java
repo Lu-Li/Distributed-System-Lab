@@ -15,6 +15,7 @@ import message.Broker;
 import message.Message;
 import message.MessagePasser;
 import message.TimestampedMessage;
+import util.FileIO;
 
 public class TestLocker {
 	public static void  main(String[] args) throws InterruptedException {
@@ -61,6 +62,9 @@ public class TestLocker {
 					break;
 				case 3:
 					Locker.reportStatus();
+					break;
+				case 4:
+					FileIO.readFromURL("https://s3.amazonaws.com/luli/ds/config.yaml", "./resources/config.yaml");
 					break;
 				default:
 					MessagePasser.terminateAll();
