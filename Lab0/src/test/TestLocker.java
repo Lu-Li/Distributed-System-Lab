@@ -46,6 +46,7 @@ public class TestLocker {
 			System.out.println("1. enter CS");
 			System.out.println("2. exit CS");
 			System.out.println("3. check CS");
+			System.out.println("4. get latest configuration file");
 			System.out.println("other number: exit");
 			System.out.println("=======================");
 			Scanner scanner = new Scanner(System.in);
@@ -64,7 +65,8 @@ public class TestLocker {
 					Locker.reportStatus();
 					break;
 				case 4:
-					FileIO.readFromURL("https://s3.amazonaws.com/luli/ds/config.yaml", "./resources/config.yaml");
+					FileIO.readFromURL("https://s3.amazonaws.com/luli/ds/config.yaml"
+							, "./resources/config.yaml");
 					break;
 				default:
 					MessagePasser.terminateAll();
