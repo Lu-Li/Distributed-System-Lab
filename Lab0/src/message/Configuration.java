@@ -43,13 +43,13 @@ public class Configuration {
 			network = (List<Map>) config.get("configuration");
 			sendRules = (List<Map>) config.get("sendRules");
 			receiveRules = (List<Map>) config.get("receiveRules");
-/*
-			System.out.println();
-			Log.verbose("CONFIG", network.toString());
-			Log.verbose("SEND", sendRules.toString());
-			Log.verbose("RECEIVE", receiveRules.toString());
-			System.out.println();
-*/
+
+//			System.out.println();
+//			Log.verbose2("CONFIG", network.toString());
+//			Log.verbose2("SEND", sendRules.toString());
+//			Log.verbose2("RECEIVE", receiveRules.toString());
+//			System.out.println();
+
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found!");
 			e.printStackTrace();

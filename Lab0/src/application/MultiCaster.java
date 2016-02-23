@@ -174,7 +174,7 @@ public class MultiCaster implements DistributedApplication {
 	 * R_Multicast methods
 	 */
 	public void R_MultiCast(String groupName, Message message) {
-		Log.info("MultiCaster", "R_MC :" + message.getData() + "->" + groupName);
+		Log.verbose2("MultiCaster", "R_MC :" + message.getData() + "->" + groupName);
 
 		int groupIndex = getIndexByGroupName(groupName);
 		MultiCastGroup myGroup = groups.get(groupIndex);
@@ -187,7 +187,7 @@ public class MultiCaster implements DistributedApplication {
 					newMessage = message;
 				} else {
 					TimeStamp timeStamp = ClockServiceFactory.getClockService().issueTimeStamp();
-					newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
+					newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData(),timeStamp);
 				}
 
 				//Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);

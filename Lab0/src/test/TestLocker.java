@@ -66,7 +66,7 @@ public class TestLocker {
 					break;
 				case 4:
 					FileIO.readFromURL("https://s3.amazonaws.com/luli/ds/config.yaml"
-							, "./resources/config.yaml");
+							, "../resources/config.yaml");
 					break;
 				default:
 					MessagePasser.terminateAll();

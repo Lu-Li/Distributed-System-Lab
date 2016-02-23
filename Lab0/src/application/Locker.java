@@ -84,6 +84,9 @@ public class Locker implements DistributedApplication{
 	 * functionalities
 	 */
 	public static void onEvent(String eventType, String src){
+		//if (src.equals(MessagePasser.getLocalName()))
+//			return;
+		Log.verbose("Locker", "event:"+eventType+" from:"+src);
 		if (eventType.equals("request")){			
 			if (state == State.hold || voting){
 				// cannot vote, wait
@@ -110,7 +113,7 @@ public class Locker implements DistributedApplication{
 				voting = false;
 			}
 		} else if (eventType.equals("ack")){
-			Log.info("Locker", "ack received, counter = "+counter);
+			Log.info("Locker", "ack received from "+src+", counter = "+counter);
 			
 			counter++;
 			if (counter == myGroupSize){

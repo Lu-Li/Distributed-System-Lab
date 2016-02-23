@@ -21,6 +21,10 @@ public class TimestampedMessage extends Message{
 		this.timestamp = ClockServiceFactory.getClockService().getTimeStamp();
 	}
 	
+	public TimestampedMessage(String dest, String kind, Object data,TimeStamp timeStamp) {
+		super(dest, kind, data);
+		this.timestamp = timeStamp;
+	}
 	/**
 	 * Initializers
 	 * @param dest : destination of message as a name in the config file 

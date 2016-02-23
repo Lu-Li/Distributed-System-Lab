@@ -17,7 +17,9 @@ public class Log {
 		if (type.equals("Locker"))			
 			print(type,msg,36);
 	}
-	
+	public static void verbose2(String type, String msg) {
+		print(type,msg,36);
+	}
 	public static void error(String type, String msg) {
 		print(type,msg,31);
 	}
