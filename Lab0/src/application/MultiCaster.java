@@ -109,7 +109,7 @@ public class MultiCaster implements DistributedApplication {
 	 * B_Multicast methods
 	 */
 	public void B_MultiCast(String groupName, Message message) {
-		Log.info("MultiCaster", "B_MC ::" + message + "->" + groupName);
+//		Log.info("MultiCaster", "B_MC ::" + message + "->" + groupName);
 
 		int groupIndex = getIndexByGroupName(groupName);
 		MultiCastGroup myGroup = groups.get(groupIndex);
@@ -131,7 +131,7 @@ public class MultiCaster implements DistributedApplication {
 						continue;
 					}
 					
-					Log.info("MultiCaster", "B_MC :" + MCMessage + " => " + dest);
+//					Log.info("MultiCaster", "B_MC :" + MCMessage + " => " + dest);
 					MessagePasser.send(MCMessage);
 				}
 			} else {
@@ -143,7 +143,7 @@ public class MultiCaster implements DistributedApplication {
 	}
 
 	void B_Deliver(Message msg) {
-		Log.info("MultiCaster", "B_Deliver: " + msg);
+		//Log.info("MultiCaster", "B_Deliver: " + msg);
 
 		// Using B_Multicast, deliver to caller app (use sysout instead)
 		if (msg.getKind().equals(Message_B_MultiCast)) {
@@ -190,7 +190,7 @@ public class MultiCaster implements DistributedApplication {
 					newMessage = new TimestampedMessage("", Message_R_MultiCast, message.getData());
 				}
 
-				Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);
+				//Log.info("MultiCaster", "R_MC call B_MC: " + newMessage + " -> " + groupName);
 
 				B_MultiCast(groupName, newMessage);
 			} else {

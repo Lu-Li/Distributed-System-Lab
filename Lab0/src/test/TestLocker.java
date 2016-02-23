@@ -28,7 +28,7 @@ public class TestLocker {
 		System.out.println("Welcome to team22-lab1");
 
 		//infrastructure
-		ClockServiceFactory.setClockService("Vector",4);
+		ClockServiceFactory.setClockService("Vector",7);
 		MessagePasser.init(args[0], args[1]);
 		Broker broker = new Broker();
 		

@@ -93,14 +93,14 @@ public class Locker implements DistributedApplication{
 				Log.info("Locker", "request received, vote for "+src);
 				
 				//vote for that request's src
-				Message message = new Message(src, "ack", "no payload");
+				Message message = new Message(src, "ack", "ack");
 				MessagePasser.send(message);
 				voting = true;
 			}
 		} else if (eventType.equals("release")){
 			if (queue.size()!=0){
 				String waitingReq = queue.poll();
-				Message message = new Message(waitingReq, "ack", "no payload");
+				Message message = new Message(waitingReq, "ack", "ack");
 				
 				Log.info("Locker", "release received, send ack to first waiting requester:"+waitingReq);
 				MessagePasser.send(message);
@@ -133,7 +133,7 @@ public class Locker implements DistributedApplication{
 
 		//multicast to all member in my group, wait for acks
 		counter = 0;
-		multiCaster.R_MultiCast(myGroup, new Message(null, "request", "no payload"));
+		multiCaster.R_MultiCast(myGroup, new Message(null, "request", "request"));
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class Locker implements DistributedApplication{
 		state = State.release;
 		
 		//multicast to all member in my group
-		multiCaster.R_MultiCast(myGroup, new Message(null, "release", "no payload"));
+		multiCaster.R_MultiCast(myGroup, new Message(null, "release", "release"));
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class Locker implements DistributedApplication{
 	 */
 	@Override
 	public void OnMessage(Message msg) {
-		if (msg.equals("ack")){
+		if (msg.getKind().equals("ack")){
 			onEvent((String)msg.getData(), msg.getSrc());
 		}
 	}

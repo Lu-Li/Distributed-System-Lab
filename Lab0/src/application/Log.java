@@ -6,11 +6,16 @@ public class Log {
 	}
 
 	public static void info(String type, String msg) {
-		print(type,msg,33);
+		if (type.equals("Locker"))
+			print(type,msg,33);
+		else if (type.equals("MultiCaster"))
+			print(type,msg,34);
+			 
 	}
 
 	public static void verbose(String type, String msg) {
-		print(type,msg,36);
+		if (type.equals("Locker"))			
+			print(type,msg,36);
 	}
 	
 	public static void error(String type, String msg) {
